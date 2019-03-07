@@ -1,4 +1,4 @@
-pyTelegramBotAPI
+python-telegram-bot
 certifi==2018.11.29
 chardet==3.0.4
 idna==2.8
