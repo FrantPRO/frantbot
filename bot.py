@@ -3,8 +3,6 @@ import config
 import requests
 import datetime
 
-token = config.token
-
 
 class BotHandler:
 
@@ -36,7 +34,7 @@ class BotHandler:
         return last_update
 
 
-greet_bot = BotHandler(token)
+greet_bot = BotHandler(config.token)
 greetings = ('здравствуй', 'привет', 'ку', 'здорово')
 now = datetime.datetime.now()
 
