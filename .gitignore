@@ -1,2 +1,11 @@
-.idea
+# Byte-compiled files
+__pycache__/
+
+# PyCharm files
+.idea/
+
+#Virtualenv directory
+venv/
+
+# config file
 config.py
