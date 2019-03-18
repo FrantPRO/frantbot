@@ -18,8 +18,8 @@ WEBHOOK_HOST = settings.HOST
 WEBHOOK_PORT = settings.PORT
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 
-WEBHOOK_SSL_CERT = settings.SSL_CERT
-WEBHOOK_SSL_PRIV = settings.SSL_PRIV
+# WEBHOOK_SSL_CERT = settings.SSL_CERT
+# WEBHOOK_SSL_PRIV = settings.SSL_PRIV
 
 WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
@@ -64,8 +64,9 @@ def echo_message(message):
 bot.remove_webhook()
 
 # Set webhook
-bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
-                certificate=open(WEBHOOK_SSL_CERT, 'r'))
+# bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+#                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
+bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH)
 
 # Build ssl context
 # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
