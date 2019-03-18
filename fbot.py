@@ -1,80 +1,46 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# This is a simple echo bot using decorators and webhook with aiohttp
-# It echoes any incoming text messages and does not use the polling method.
-
-import logging
-import ssl
 import settings
-
+import asyncio
+import aiohttp
 from aiohttp import web
+import json
 
-import telebot
-
-API_TOKEN = settings.TOKEN
-
-WEBHOOK_HOST = settings.HOST
-WEBHOOK_PORT = settings.PORT
-WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
-
-# WEBHOOK_SSL_CERT = settings.SSL_CERT
-# WEBHOOK_SSL_PRIV = settings.SSL_PRIV
-
-WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
-WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
-
-logger = telebot.logger
-telebot.logger.setLevel(logging.INFO)
-
-bot = telebot.TeleBot(API_TOKEN)
-
-app = web.Application()
+TOKEN = settings.TOKEN
+API_URL = 'https://api.telegram.org/bot%s/sendMessage' % TOKEN
 
 
-# Process webhook calls
-async def handle(request):
-    if request.match_info.get('token') == bot.token:
-        request_body_dict = await request.json()
-        update = telebot.types.Update.de_json(request_body_dict)
-        bot.process_new_updates([update])
-        return web.Response()
-    else:
-        return web.Response(status=403)
+async def handler(request):
+    data = await request.json()
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    message = {
+        'chat_id': data['message']['chat']['id'],
+        'text': data['message']['text']
+    }
+    async with aiohttp.ClientSession(loop=loop) as session:
+        async with session.post(API_URL,
+                                data=json.dumps(message),
+                                headers=headers) as resp:
+            try:
+                assert resp.status == 200
+            except:
+                return web.Response(status=500)
+    return web.Response(status=200)
 
 
-app.router.add_post('/{token}/', handle)
+async def init_app(loop):
+    app = web.Application(loop=loop, middlewares=[])
+    app.router.add_post('/api/v1', handler)
+    return app
 
 
-# Handle '/start' and '/help'
-@bot.message_handler(commands=['help', 'start'])
-def send_welcome(message):
-    bot.reply_to(message,
-                 ("Hi there, I am EchoBot.\n"
-                  "I am here to echo your kind words back to you."))
-
-
-# Handle all other messages
-@bot.message_handler(func=lambda message: True, content_types=['text'])
-def echo_message(message):
-    bot.reply_to(message, message.text)
-
-
-# Remove webhook, it fails sometimes the set if there is a previous webhook
-bot.remove_webhook()
-
-# Set webhook
-# bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
-#                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
-bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH)
-
-# Build ssl context
-# context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-# context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
-
-# Start aiohttp server
-web.run_app(
-    app,
-    host=WEBHOOK_LISTEN,
-    port=WEBHOOK_PORT,)
-    # ssl_context=context,)
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    try:
+        app = loop.run_until_complete(init_app(loop))
+        web.run_app(app, host='0.0.0.0', port=23456)
+    except Exception as e:
+        print('Error create server: %r' % e)
+    finally:
+        pass
+    loop.close()

@@ -2,10 +2,12 @@ import os
 
 TOKEN = os.environ.get("TOKEN")
 
-HOST = 'https://frantbot.herokuapp.com/'
+HOST = os.environ.get("HOST")
 
-PORT = os.environ.get("PORT") # 443, 80, 88 or 8443 (port need to be 'open')
+PORT = os.environ.get("PORT")
 
-SSL_CERT = 'https://frantbot.herokussl.com/' # './webhook_cert.pem'  # Path to the ssl certificate
+SSL_CERT = os.environ.get("SSL_CERT")
 
-SSL_PRIV = 'https://frantbot.herokussl.com/' # './webhook_pkey.pem'  # Path to the ssl private key
+SSL_PRIV = os.environ.get("SSL_PRIV")
+
+IP_LISTEN = os.environ.get("IP_LISTEN")
