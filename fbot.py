@@ -68,12 +68,12 @@ bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
 # Build ssl context
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
+# context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+# context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
 
 # Start aiohttp server
 web.run_app(
     app,
     host=WEBHOOK_LISTEN,
-    port=WEBHOOK_PORT,
-    ssl_context=context,)
+    port=WEBHOOK_PORT,)
+    # ssl_context=context,)
