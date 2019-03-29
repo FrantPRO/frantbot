@@ -7,7 +7,7 @@ bot = telebot.TeleBot(settings.TOKEN)
 
 @bot.message_handler(commands=['start'])
 def send_welcom(message):
-    bot.reply_to(message, "Hello MF!")
+    bot.reply_to(message, "Hello friend!")
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
