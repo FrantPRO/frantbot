@@ -11,7 +11,7 @@ def send_welcom(message):
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    bot.send_mesaage(message.chat.id, 'Help your self')
+    bot.send_message(message.chat.id, 'Help your self')
 
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
