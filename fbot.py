@@ -14,7 +14,7 @@ def send_help(message):
 @bot.message_handler(commands=['kurs'])
 def send_kurs(message):
     kurs=0
-    bot.send_message(message.chat.id, message.text)
+    bot.send_message(message.chat.id, message.text + kurs)
 
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
