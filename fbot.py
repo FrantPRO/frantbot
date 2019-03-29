@@ -15,7 +15,7 @@ def send_help(message):
 def send_kurs(message):
     kurs=0
     text = message.text
-    currency = text[4,]
+    currency = text[6,9]
     bot.send_message(message.chat.id, currency)
 
 @bot.message_handler(func=lambda m: True)
