@@ -13,13 +13,12 @@ def send_help(message):
 
 @bot.message_handler(commands=['kurs'])
 def send_kurs(message):
-    kurs=0
-    text = message.text
-    if len(text) == 9:
-        currency = text[6,9]
-    else:
-        currency = 'non'
-    bot.send_message(message.chat.id, currency)
+    kurs = 0
+    if 'usd' in message.text:
+        kurs = 1
+    elif 'eur' in message.text:
+        kurs = 2
+    bot.send_message(message.chat.id, kurs)
 
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
