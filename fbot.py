@@ -15,7 +15,10 @@ def send_help(message):
 def send_kurs(message):
     kurs=0
     text = message.text
-    currency = text[6,9]
+    if len(text) = 9:
+        currency = text[6,9]
+    else:
+        currency = 'non'
     bot.send_message(message.chat.id, currency)
 
 @bot.message_handler(func=lambda m: True)
