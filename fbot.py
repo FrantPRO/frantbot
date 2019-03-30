@@ -15,7 +15,7 @@ def send_help(message):
 def send_kurs(message):
     kurs=0
     text = message.text
-    if len(text) = 9:
+    if len(text) == 9:
         currency = text[6,9]
     else:
         currency = 'non'
