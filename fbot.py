@@ -1,5 +1,6 @@
 import settings
 import telebot
+import exchange_rates
 
 bot = telebot.TeleBot(settings.TOKEN)
 
@@ -24,4 +25,5 @@ def send_kurs(message):
 def echo_all(message):
     bot.send_message(message.chat.id, message.text)
 
-bot.polling()
+if __name__ == 'main':
+    bot.polling()
