@@ -12,7 +12,8 @@ def send_welcom(message):
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    text = '/start - Start the bot\n' \
+    text = 'My first bot - echobot\n' \
+           '/start - Start the bot\n' \
            '/help - about menu\n' \
            '/kurs - Kurs valut (usd. eur)'
     bot.send_message(message.chat.id, text)
