@@ -23,9 +23,9 @@ def send_help(message):
 def send_kurs(message):
     kurs = 0
     if 'usd' in message.text:
-        kurs = exchange_rates.get_kurs_usd_today()
+        kurs = 'Курс USD ' + exchange_rates.get_kurs_usd_today()
     elif 'eur' in message.text:
-        kurs = exchange_rates.get_kurs_eur_today()
+        kurs = 'Курс EUR' + exchange_rates.get_kurs_eur_today()
     bot.send_message(message.chat.id, kurs)
 
 
