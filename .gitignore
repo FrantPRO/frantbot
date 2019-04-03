@@ -1,11 +1,11 @@
 # Byte-compiled files
-__pycache__/
+__pycache__
 
 # PyCharm files
-.idea/
+.idea
 
 #Virtualenv directory
-venv/
+venv
 
 # any test
 .test
