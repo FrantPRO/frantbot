@@ -15,25 +15,18 @@ def send_help(message):
     text = 'My first bot - echobot\n' \
            '/start - Start the bot\n' \
            '/help - about menu\n' \
-           '/kurs[usd] - Kurs valut (usd. eur)'
+           '/kurs - Kurs valut (usd. eur)'
     bot.send_message(message.chat.id, text)
 
 
 @bot.message_handler(commands=['kurs'])
 def send_kurs(message):
+    kurs = 0
     if 'usd' in message.text:
-        currency_info = exchange_rates.get_rate_usd()
-
+        kurs = exchange_rates.get_kurs_usd_today()
     elif 'eur' in message.text:
-        currency_info = exchange_rates.get_rate_eur()
-
-    if currency_info:
-        text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get('value') + ' (' + currency_info.get(
-            'date') + ')'
-    else:
-        text = 'not found'
-
-    bot.send_message(message.chat.id, text)
+        kurs = exchange_rates.get_kurs_eur_today()
+    bot.send_message(message.chat.id, kurs)
 
 
 @bot.message_handler(func=lambda m: True)
