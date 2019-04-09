@@ -1,28 +1,35 @@
 import requests
-import datetime
+import xml.dom.minidom
 
-base_url = 'http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={date_start}&date_req2={date_finish}&VAL_NM_RQ={currency_code}'
+url = 'http://www.cbr.ru/scripts/XML_daily.asp'
+r = requests.get(url)
+if r.status_code == 200:
+    dom = xml.dom.minidom.parseString(r.text)
+    dom.normalize()
+    date = dom.getElementsByTagName('ValCurs')[0].getAttribute('Date')
+    currencies = dom.getElementsByTagName('Valute')
+else:
+    currencies = None
+
 usd = 'R01235'
 eur = 'R01239'
-date_start = datetime.date.today().strftime('%d/%m/%Y')
-date_finish = date_start
 
 
-def get_kurs_usd_today():
-    url = base_url.format(date_start=date_start, date_finish=date_finish, currency_code=usd)
-    r = requests.get(url)
-    if r.status_code == 200 and r.text:
-        begin = r.text.find('<Value>')
-        finish = r.text.find('</Value>')
-        if begin > 0:
-            return r.text[begin+7:finish]
+def get_rate_usd():
+    if not currencies:
+        return ''
+
+    for parent in currencies:
+        if parent.getAttribute('ID') == usd:
+            rate = parent.getElementsByTagName('Value')[0].firstChild.data
+            return {'currency': 'USD', 'date': date, 'value': rate}
 
 
-def get_kurs_eur_today():
-    url = base_url.format(date_start=date_start, date_finish=date_finish, currency_code=eur)
-    r = requests.get(url)
-    if r.status_code == 200 and r.text:
-        begin = r.text.find('<Value>')
-        finish = r.text.find('</Value>')
-        if begin > 0:
-            return r.text[begin+7:finish]
+def get_rate_eur():
+    if not currencies:
+        return ''
+
+    for parent in currencies:
+        if parent.getAttribute('ID') == eur:
+            rate = parent.getElementsByTagName('Value')[0].firstChild.data
+            return {'currency': 'EUR', 'date': date, 'value': rate}
