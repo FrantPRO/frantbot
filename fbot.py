@@ -1,12 +1,12 @@
 import settings
 import telebot
 import os
-from flask import Flask, request
 import exchange_rates
 
-bot = telebot.TeleBot(settings.TOKEN)
-server = Flask(__name__)
-
+TOKEN = settings.TOKEN
+bot = telebot.TeleBot(TOKEN)
+PORT = int(os.environ.get('PORT', '8443'))
+updater = Updater(TOKEN)
 
 @bot.message_handler(commands=['start'])
 def send_welcom(message):
@@ -44,19 +44,8 @@ def send_kurs(message):
 def echo_all(message):
     bot.send_message(message.chat.id, message.text)
 
-
-@server.route("/" + settings.TOKEN, methods=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
-
-
-@server.route("/")
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url=os.environ.get('HOST') + settings.TOKEN)
-    return "?", 200
-
-
-if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+updater.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                      url_path=TOKEN)
+updater.bot.set_webhook("https://frantbot.herokuapp.com/" + TOKEN)
+updater.idle()
