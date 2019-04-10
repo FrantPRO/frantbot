@@ -45,30 +45,24 @@ def echo_all(message):
     bot.send_message(message.chat.id, message.text)
 
 
-# if __name__ == '__main__':
-#     bot.polling()
+logger = telebot.logger
+telebot.logger.setLevel(logging.INFO)
 
-# Проверим, есть ли переменная окружения Хероку (как ее добавить смотрите ниже)
-if "HEROKU" in list(os.environ.keys()):
-    logger = telebot.logger
-    telebot.logger.setLevel(logging.INFO)
-
-    server = Flask(__name__)
-    @server.route("/bot", methods=['POST'])
-    def getMessage():
-        bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-        return "!", 200
+server = Flask(__name__)
 
 
-    @server.route("/")
-    def webhook():
-        bot.remove_webhook()
-        bot.set_webhook(url=os.environ.get('HOST'))
-        print(os.environ.get('HOST'))
-        return "?", 200
-    server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
-else:
-    # если переменной окружения HEROKU нету, значит это запуск с машины разработчика.
-    # Удаляем вебхук на всякий случай, и запускаем с обычным поллингом.
+@server.route("/" + settings.TOKEN, methods=['POST'])
+def getMessage():
+    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "!", 200
+
+
+@server.route("/")
+def webhook():
     bot.remove_webhook()
-    bot.polling(none_stop=True)
+    bot.set_webhook(url=os.environ.get('HOST') + settings.TOKEN)
+    return "?", 200
+
+
+if __name__ == "__name__":
+    server.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
