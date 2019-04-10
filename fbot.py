@@ -18,7 +18,7 @@ def send_help(message):
     text = 'My first bot - echobot\n' \
            '/start - Start the bot\n' \
            '/help - about menu\n' \
-           '/kurs[val] - Kurs valut (usd. eur)'
+           '/kurs usd - Kurs valut (usd. eur)'
     bot.send_message(message.chat.id, text)
 
 
@@ -65,4 +65,4 @@ def webhook():
 
 
 if __name__ == "__name__":
-    server.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
+    server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
