@@ -6,6 +6,3 @@ __pycache__
 
 #Virtualenv directory
 venv
-
-# any test
-.test
