@@ -2,4 +2,3 @@ flask
 requests
 telebot
 pyTelegramBotAPI
-os
