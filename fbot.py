@@ -2,10 +2,10 @@ import settings
 import telebot
 import os
 from flask import Flask, request
-import logging
 import exchange_rates
 
 bot = telebot.TeleBot(settings.TOKEN)
+server = Flask(__name__)
 
 
 @bot.message_handler(commands=['start'])
@@ -43,12 +43,6 @@ def send_kurs(message):
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
     bot.send_message(message.chat.id, message.text)
-
-
-logger = telebot.logger
-telebot.logger.setLevel(logging.INFO)
-
-server = Flask(__name__)
 
 
 @server.route("/" + settings.TOKEN, methods=['POST'])
