@@ -5,7 +5,8 @@ from flask import Flask, request
 import logging
 import exchange_rates
 
-bot = telebot.TeleBot(settings.TOKEN)
+TOKEN = settings.TOKEN
+bot = telebot.TeleBot(TOKEN)
 
 
 @bot.message_handler(commands=['start'])
@@ -51,7 +52,7 @@ telebot.logger.setLevel(logging.INFO)
 server = Flask(__name__)
 
 
-@server.route("/" + settings.TOKEN, methods=['POST'])
+@server.route("/" + TOKEN, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
@@ -60,7 +61,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url=os.environ.get('HOST') + settings.TOKEN)
+    bot.set_webhook(url=os.environ.get('HOST') + TOKEN)
     return "?", 200
 
 
