@@ -1,5 +1,4 @@
 flask
 requests
 telebot
-aiohttp
 pyTelegramBotAPI
