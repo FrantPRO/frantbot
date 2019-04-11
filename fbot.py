@@ -2,6 +2,7 @@ import settings
 import telebot
 import os
 import exchange_rates
+from telegram.ext import Updater
 
 TOKEN = settings.TOKEN
 bot = telebot.TeleBot(TOKEN)
