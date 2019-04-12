@@ -1,69 +1,119 @@
-import settings
-import telebot
-import os
-from flask import Flask, request
+# import exchange_rates
+
 import logging
-import exchange_rates
+from queue import Queue
 
-TOKEN = settings.TOKEN
-bot = telebot.TeleBot(TOKEN)
+import cherrypy
+import telegram
+from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
 
-
-@bot.message_handler(commands=['start'])
-def send_welcom(message):
-    bot.reply_to(message, "Hello friend!")
+from settings import HOST, PORT, TOKEN
 
 
-@bot.message_handler(commands=['help'])
-def send_help(message):
-    text = 'My first bot - echobot\n' \
-           '/start - Start the bot\n' \
-           '/help - about menu\n' \
-           '/kurs usd - Kurs valut (usd. eur)'
-    bot.send_message(message.chat.id, text)
+class SimpleWebsite:
+    @cherrypy.expose
+    def index(self):
+        return """<H1>Welcome!</H1>"""
 
 
-@bot.message_handler(commands=['kurs'])
-def send_kurs(message):
-    currency_info = None
-    if 'usd' in message.text:
-        currency_info = exchange_rates.get_rate_usd()
+class BotComm:
+    exposed = True
 
-    elif 'eur' in message.text:
-        currency_info = exchange_rates.get_rate_eur()
+    def __init__(self, TOKEN, HOST):
+        super(BotComm, self).__init__()
+        self.TOKEN = TOKEN
+        self.HOST = HOST
+        self.bot = telegram.Bot(self.TOKEN)
+        try:
+            self.bot.setWebhook(
+                "https://{}.herokuapp.com/{}".format(self.HOST, self.TOKEN))
+        except:
+            raise RuntimeError("Failed to set the webhook")
 
-    if currency_info:
-        text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get('value') + ' (' + currency_info.get(
-                'date') + ')'
-    else:
-        text = 'currency not found'
+        self.update_queue = Queue()
+        self.dp = Dispatcher(self.bot, self.update_queue)
 
-    bot.send_message(message.chat.id, text)
+        self.dp.add_handler(CommandHandler("start", self._start))
+        self.dp.add_handler(MessageHandler(Filters.text, self._process_update))
+        self.dp.add_error_handler(self._error)
 
+    @cherrypy.tools.json_in()
+    def POST(self, *args, **kwargs):
+        update = cherrypy.request.json
+        update = telegram.Update.de_json(update, self.bot)
+        self.dp.process_update(update)
 
-@bot.message_handler(func=lambda m: True)
-def echo_all(message):
-    bot.send_message(message.chat.id, message.text)
+    def _error(self, error):
+        cherrypy.log("Error occurred - {}".format(error))
 
+    def _start(self, bot, update):
+        update.effective_message.reply_text('Hello friend!')
 
-logger = telebot.logger
-telebot.logger.setLevel(logging.INFO)
+    # @bot.message_handler(commands=['help'])
+    # def send_help(message):
+    #     text = 'My first bot - echobot\n' \
+    #            '/start - Start the bot\n' \
+    #            '/help - about menu\n' \
+    #            '/kurs usd - Kurs valut (usd. eur)'
+    #     bot.send_message(message.chat.id, text)
 
-server = Flask(__name__)
+    # @bot.message_handler(func=lambda m: True)
+    # def echo_all(message):
+    #     bot.send_message(message.chat.id, message.text)
 
+    # @bot.message_handler(commands=['kurs'])
+    # def send_kurs(message):
+    #     currency_info = None
+    #     if 'usd' in message.text:
+    #         currency_info = exchange_rates.get_rate_usd()
+    #
+    #     elif 'eur' in message.text:
+    #         currency_info = exchange_rates.get_rate_eur()
+    #
+    #     if currency_info:
+    #         text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get(
+    #             'value') + ' (' + currency_info.get(
+    #             'date') + ')'
+    #     else:
+    #         text = 'currency not found'
+    #
+    #     bot.send_message(message.chat.id, text)
 
-@server.route("/" + TOKEN, methods=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
+    def _accept_order(self, bot, update):
+        chat_id = update.effective_message.chat.id
+        order_text = update.effective_message.text
+        order_user = update.effective_message.from_user
+        order_user_first_name = order_user.first_name
+        order_user_last_name = order_user.last_name
+        order_user_username = order_user.username
+        text = "{first_name} {last_name} ({username}) " \
+               "желает: {order}".format(first_name=order_user_first_name,
+                                        last_name=order_user_last_name,
+                                        username=order_user_username,
+                                        order=order_text)
+        self.bot.send_message(chat_id=chat_id, text=text)
+        update.effective_message.reply_text("Ваш заказ принят!")
 
-
-@server.route("/")
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url=os.environ.get('HOST') + TOKEN)
-    return "?", 200
+    def _process_update(self, bot, update):
+        chat_id = update.effective_message.chat.id
+        if chat_id == 112789249:
+            self.bot.send_message(chat_id=chat_id, text="")
 
 
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 80)))
+    # Enable logging
+    logging.basicConfig(
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    # Set up the cherrypy configuration
+    cherrypy.config.update({"server.socket_host": "0.0.0.0", })
+    cherrypy.config.update({"server.socket_port": int(PORT), })
+    cherrypy.tree.mount(SimpleWebsite(), "/")
+    cherrypy.tree.mount(
+        BotComm(TOKEN, HOST),
+        "/{}".format(TOKEN),
+        {"/": {
+            "request.dispatch": cherrypy.dispatch.MethodDispatcher()}})
+    cherrypy.engine.start()

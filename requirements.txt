@@ -1,4 +1,2 @@
-flask
-requests
-telebot
-pyTelegramBotAPI
+telegram
+cherrypy
