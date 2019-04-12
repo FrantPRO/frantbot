@@ -5,7 +5,12 @@ from queue import Queue
 
 import cherrypy
 import telegram
-from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
+import telegram.ext
+
+CommandHandler = telegram.ext.CommandHandler
+MessageHandler = telegram.ext.MessageHandler
+Filters = telegram.ext.Filters
+Dispatcher = telegram.ext.Dispatcher
 
 from settings import HOST, PORT, TOKEN
 
