@@ -33,7 +33,9 @@ class BotComm:
         self.dp = Dispatcher(self.bot, self.update_queue)
 
         self.dp.add_handler(CommandHandler("start", self._start))
-        self.dp.add_handler(MessageHandler(Filters.text, self._process_update))
+        self.dp.add_handler(CommandHandler("help", self._help))
+        self.dp.add_handler(CommandHandler("kurs", self._kurs))
+        self.dp.add_handler(MessageHandler(Filters.text, self._echo_all))
         self.dp.add_error_handler(self._error)
 
     @cherrypy.tools.json_in()
@@ -46,10 +48,15 @@ class BotComm:
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
-        print("!!!!!! start")
         update.effective_message.reply_text('Hello friend!')
 
-    def _process_update(self, bot, update):
+    def _help(self, bot, update):
+        update.effective_message.reply_text('help')
+        
+    def _kurs(self, bot, update):
+        update.effective_message.relpy_text('kurs')
+        
+    def _echo_all(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.text)
 
 
