@@ -78,25 +78,25 @@ class BotComm:
     #
     #     bot.send_message(message.chat.id, text)
 
-    def _accept_order(self, bot, update):
-        chat_id = update.effective_message.chat.id
-        order_text = update.effective_message.text
-        order_user = update.effective_message.from_user
-        order_user_first_name = order_user.first_name
-        order_user_last_name = order_user.last_name
-        order_user_username = order_user.username
-        text = "{first_name} {last_name} ({username}) " \
-               "желает: {order}".format(first_name=order_user_first_name,
-                                        last_name=order_user_last_name,
-                                        username=order_user_username,
-                                        order=order_text)
-        self.bot.send_message(chat_id=chat_id, text=text)
-        update.effective_message.reply_text("Ваш заказ принят!")
-
-    def _process_update(self, bot, update):
-        chat_id = update.effective_message.chat.id
-        if chat_id == 112789249:
-            self.bot.send_message(chat_id=chat_id, text="")
+    # def _accept_order(self, bot, update):
+    #     chat_id = update.effective_message.chat.id
+    #     order_text = update.effective_message.text
+    #     order_user = update.effective_message.from_user
+    #     order_user_first_name = order_user.first_name
+    #     order_user_last_name = order_user.last_name
+    #     order_user_username = order_user.username
+    #     text = "{first_name} {last_name} ({username}) " \
+    #            "желает: {order}".format(first_name=order_user_first_name,
+    #                                     last_name=order_user_last_name,
+    #                                     username=order_user_username,
+    #                                     order=order_text)
+    #     self.bot.send_message(chat_id=chat_id, text=text)
+    #     update.effective_message.reply_text("Ваш заказ принят!")
+    #
+    # def _process_update(self, bot, update):
+    #     chat_id = update.effective_message.chat.id
+    #     if chat_id == 112789249:
+    #         self.bot.send_message(chat_id=chat_id, text="")
 
 
 if __name__ == "__main__":
