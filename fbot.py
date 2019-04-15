@@ -68,7 +68,7 @@ if __name__ == "__main__":
     print("!!!!!! cherrypy set host")
     cherrypy.config.update({"server.socket_port": int(PORT), })
     print("!!!!!! cherrypy set port")
-    cherrypy.tree.mount(SimpleWebsite(), "/")
+    # cherrypy.tree.mount(SimpleWebsite(), "/")
     print("!!!!!! cherrypy start SimpleWebsite")
     cherrypy.tree.mount(
         BotComm(TOKEN, NAME),
