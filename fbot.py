@@ -23,7 +23,9 @@ class BotComm:
         self.NAME = NAME
         self.bot = telegram.Bot(self.TOKEN)
         try:
-            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
+            url = "https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN)
+            print(url)
+            self.bot.setWebhook(url)
         except:
             raise RuntimeError("Failed to set the webhook")
 
