@@ -51,10 +51,14 @@ class BotComm:
         update.effective_message.reply_text('Hello friend!')
 
     def _help(self, bot, update):
-        update.effective_message.reply_text('help')
+        text = 'My first bot - echobot\n' \
+        '/start - Start the bot\n' \
+        '/help - about menu\n' \
+        '/kurs usd - Kurs valut (usd. eur)'
+        update.effective_message.reply_text(text)
         
     def _kurs(self, bot, update):
-        update.effective_message.relpy_text('kurs')
+        update.effective_message.reply_text('kurs')
         
     def _echo_all(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.text)
