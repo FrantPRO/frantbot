@@ -21,6 +21,7 @@ class BotComm:
 
     def __init__(self, TOKEN, NAME):
         super(BotComm, self).__init__()
+        print("!!!!!! start init")
         self.TOKEN = TOKEN
         self.NAME = NAME
         self.bot = telegram.Bot(self.TOKEN)
@@ -35,14 +36,17 @@ class BotComm:
         self.dp.add_handler(CommandHandler("start", self._start))
         # self.dp.add_handler(MessageHandler(Filters.text, self._process_update))
         self.dp.add_error_handler(self._error)
+        print("!!!!!! finish init")
 
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
+        print("!!!!!! post")
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
 
     def _error(self, error):
+        print("!!!!!! error")
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
@@ -106,6 +110,8 @@ if __name__ == "__main__":
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO)
     logger = logging.getLogger(__name__)
+
+    print("!!!!!! logger start")
 
     # Set up the cherrypy configuration
     cherrypy.config.update({"server.socket_host": "0.0.0.0", })
