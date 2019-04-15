@@ -7,7 +7,7 @@ import cherrypy
 import telegram
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
 
-from settings import HOST, PORT, TOKEN
+from settings import NAME, PORT, TOKEN
 
 
 class SimpleWebsite:
@@ -19,15 +19,13 @@ class SimpleWebsite:
 class BotComm:
     exposed = True
 
-    def __init__(self, TOKEN, HOST):
+    def __init__(self, TOKEN, NAME):
         super(BotComm, self).__init__()
         self.TOKEN = TOKEN
-        self.HOST = HOST
+        self.NAME = NAME
         self.bot = telegram.Bot(self.TOKEN)
         try:
-            webhook_url = "https://{}.herokuapp.com/{}".format(self.HOST, self.TOKEN)
-            print(webhook_url)
-            self.bot.setWebhook(webhook_url)
+            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
         except:
             raise RuntimeError("Failed to set the webhook")
 
@@ -113,7 +111,7 @@ if __name__ == "__main__":
     cherrypy.config.update({"server.socket_port": int(PORT), })
     cherrypy.tree.mount(SimpleWebsite(), "/")
     cherrypy.tree.mount(
-        BotComm(TOKEN, HOST),
+        BotComm(TOKEN, NAME),
         "/{}".format(TOKEN),
         {"/": {
             "request.dispatch": cherrypy.dispatch.MethodDispatcher()}})
