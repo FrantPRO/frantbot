@@ -13,6 +13,7 @@ from settings import NAME, PORT, TOKEN
 class SimpleWebsite:
     @cherrypy.expose
     def index(self):
+        print("!!!!!! Welcome!")
         return """<H1>Welcome!</H1>"""
 
 
@@ -21,7 +22,6 @@ class BotComm:
 
     def __init__(self, TOKEN, NAME):
         super(BotComm, self).__init__()
-        print("!!!!!! start init")
         self.TOKEN = TOKEN
         self.NAME = NAME
         self.bot = telegram.Bot(self.TOKEN)
@@ -36,7 +36,6 @@ class BotComm:
         self.dp.add_handler(CommandHandler("start", self._start))
         # self.dp.add_handler(MessageHandler(Filters.text, self._process_update))
         self.dp.add_error_handler(self._error)
-        print("!!!!!! finish init")
 
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
@@ -111,12 +110,13 @@ if __name__ == "__main__":
         level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    print("!!!!!! logger start")
-
     # Set up the cherrypy configuration
     cherrypy.config.update({"server.socket_host": "0.0.0.0", })
+    print("!!!!!! cherrypy set host")
     cherrypy.config.update({"server.socket_port": int(PORT), })
+    print("!!!!!! cherrypy set port")
     cherrypy.tree.mount(SimpleWebsite(), "/")
+    print("!!!!!! cherrypy start SimpleWebsite")
     cherrypy.tree.mount(
         BotComm(TOKEN, NAME),
         "/{}".format(TOKEN),
