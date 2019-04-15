@@ -67,5 +67,4 @@ if __name__ == "__main__":
         "/{}".format(TOKEN),
         {"/": {
             "request.dispatch": cherrypy.dispatch.MethodDispatcher()}})
-    print(cherrypy.tree.__str__())
     cherrypy.engine.start()
