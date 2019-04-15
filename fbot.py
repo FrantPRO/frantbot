@@ -50,7 +50,7 @@ class BotComm:
         update.effective_message.reply_text('Hello friend!')
 
     def _process_update(self, bot, update):
-        self.bot.send_message(chat_id=update.effective_message.chat.id, text="")
+        self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.text)
 
 
 if __name__ == "__main__":
