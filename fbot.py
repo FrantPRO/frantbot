@@ -33,7 +33,7 @@ class BotComm:
         self.dp = Dispatcher(self.bot, self.update_queue)
 
         self.dp.add_handler(CommandHandler("start", self._start))
-        self.dp.add_handler(MessageHandler(Filters.text, self._process_update))
+        # self.dp.add_handler(MessageHandler(Filters.text, self._process_update))
         self.dp.add_error_handler(self._error)
 
     @cherrypy.tools.json_in()
@@ -92,7 +92,7 @@ class BotComm:
     #                                     order=order_text)
     #     self.bot.send_message(chat_id=chat_id, text=text)
     #     update.effective_message.reply_text("Ваш заказ принят!")
-    #
+
     # def _process_update(self, bot, update):
     #     chat_id = update.effective_message.chat.id
     #     if chat_id == 112789249:
