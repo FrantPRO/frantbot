@@ -1,5 +1,3 @@
-# import exchange_rates
-
 import logging
 from queue import Queue
 
@@ -13,7 +11,6 @@ from settings import NAME, PORT, TOKEN
 class SimpleWebsite:
     @cherrypy.expose
     def index(self):
-        print("!!!!!! Welcome!")
         return """<H1>Welcome!</H1>"""
 
 
@@ -39,13 +36,11 @@ class BotComm:
 
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
-        print("!!!!!! post")
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
 
     def _error(self, error):
-        print("!!!!!! error")
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
@@ -65,14 +60,12 @@ if __name__ == "__main__":
 
     # Set up the cherrypy configuration
     cherrypy.config.update({"server.socket_host": "0.0.0.0", })
-    print("!!!!!! cherrypy set host")
     cherrypy.config.update({"server.socket_port": int(PORT), })
-    print("!!!!!! cherrypy set port")
-    # cherrypy.tree.mount(SimpleWebsite(), "/")
-    print("!!!!!! cherrypy start SimpleWebsite")
+    cherrypy.tree.mount(SimpleWebsite(), "/")
     cherrypy.tree.mount(
         BotComm(TOKEN, NAME),
         "/{}".format(TOKEN),
         {"/": {
             "request.dispatch": cherrypy.dispatch.MethodDispatcher()}})
+    print(cherrypy.tree.__str__())
     cherrypy.engine.start()
