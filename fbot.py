@@ -55,6 +55,7 @@ class BotComm:
         update.effective_message.reply_text(text)
         
     def _kurs(self, bot, update):
+        print(update)
         if 'usd' in update.effective_message.text:
             currency_info = exchange_rates.get_rate_usd()
         elif 'eur' in update.effective_message.text:
