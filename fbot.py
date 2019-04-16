@@ -19,7 +19,7 @@ class BotInstruction:
         chat_id = "629791023"
         bot = BotComm(TOKEN, NAME)
         bot.POST
-        bot.send_message(chat_id=chat_id, text="test http")
+        bot.say_hello(bot, chat_id, "Hello from http!")
         return "<H1>Bot working...</H1>"
 
 
@@ -78,6 +78,9 @@ class BotComm:
 
     def _get_chat_id(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.chat.id)
+
+    def say_hello(self, chat_id, message_text):
+        self.bot.send_message(chat_id=chat_id, text=message_text)
 
     def _echo_all(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.text)
