@@ -16,8 +16,10 @@ class SimpleWebsite:
 class BotInstruction:
     @cherrypy.expose
     def index(self):
+        chat_id = "123"
         bot = BotComm(TOKEN, NAME)
         bot.POST
+        bot.send_message(chat_id=chat_id, text="test http")
         return "<H1>Bot working...</H1>"
 
 
@@ -40,7 +42,8 @@ class BotComm:
         self.dp.add_handler(CommandHandler("start", self._start))
         self.dp.add_handler(CommandHandler("help", self._help))
         self.dp.add_handler(CommandHandler("kurs", self._kurs))
-        self.dp.add_handler(MessageHandler(Filters.text, self.echo_all))
+        self.dp.add_handler(CommandHandler("chatid", self._get_chat_id()))
+        self.dp.add_handler(MessageHandler(Filters.text, self._echo_all))
         self.dp.add_error_handler(self._error)
 
     @cherrypy.tools.json_in()
@@ -56,23 +59,27 @@ class BotComm:
         update.effective_message.reply_text("Hello " + update.effective_message.chat.first_name + "!")
 
     def _help(self, bot, update):
-        text = 'My first bot - echobot\n' \
-               + '/start - Start the bot\n' \
-               + '/help - about menu\n' \
-               + '/kurs - Kurs valut (usd, eur, etc)'
+        text = "My first bot - echobot\n" \
+               + "/start - Start the bot\n" \
+               + "/help - about menu\n" \
+               + "/kurs - Kurs valut (usd, eur, etc)" \
+               + "/chatid - get chat id"
         update.effective_message.reply_text(text)
         
     def _kurs(self, bot, update):
         arr = update.effective_message.text.split(" ")
         if len(arr) > 1:
             currency_info = exchange_rates.get_rate(arr[1].strip().upper())
-            text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get('value') \
-                   + ' (' + currency_info.get('date') + ')'
+            text = "Курс " + currency_info.get("currency") + ": " + currency_info.get("value") \
+                   + " (" + currency_info.get("date") + ")"
         else:
-            text = 'currency not found'
+            text = "currency not found"
         update.effective_message.reply_text(text)
 
-    def echo_all(self, bot, update):
+    def _get_chat_id(self, bot, update):
+        self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.chat.id)
+
+    def _echo_all(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.text)
 
 
