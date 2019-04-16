@@ -18,7 +18,7 @@ class BotInstruction:
     def index(self):
         bot = BotComm(TOKEN, NAME)
         bot.POST
-        bot.echo_all(bot, bot.dp.update_queue)
+        bot.echo_all(bot, bot.dp.update)
         return "<H1>Bot working...</H1>"
 
 
