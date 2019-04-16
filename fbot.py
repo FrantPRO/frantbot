@@ -16,7 +16,7 @@ class SimpleWebsite:
 class BotInstruction:
     @cherrypy.expose
     def index(self):
-        print(self)
+        print(">>> " + self)
         bot = BotComm(TOKEN, NAME)
         bot.say_hello("-392511176", "Hello from http!")
         return "<H1>Bot working...</H1>"
