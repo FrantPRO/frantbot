@@ -13,6 +13,12 @@ class SimpleWebsite:
         return """<H1>Welcome!</H1>"""
 
 
+class BotInstruction:
+    @cherrypy.expose
+    def index(self):
+        return "<H1>Bot working...</H1>"
+
+
 class BotComm:
     exposed = True
 
@@ -79,6 +85,7 @@ if __name__ == "__main__":
     cherrypy.config.update({"server.socket_host": "0.0.0.0", })
     cherrypy.config.update({"server.socket_port": int(PORT), })
     cherrypy.tree.mount(SimpleWebsite(), "/")
+    cherrypy.tree.mount(BotInstruction(), "/bot")
     cherrypy.tree.mount(
         BotComm(TOKEN, NAME),
         "/{}".format(TOKEN),
