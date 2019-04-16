@@ -51,13 +51,13 @@ class BotComm:
         text = 'My first bot - echobot\n' \
                + '/start - Start the bot\n' \
                + '/help - about menu\n' \
-               + '/kurs usd - Kurs valut (usd. eur)'
+               + '/kurs - Kurs valut (usd, eur, etc)'
         update.effective_message.reply_text(text)
         
     def _kurs(self, bot, update):
         arr = update.effective_message.text.split(" ")
         if len(arr) > 1:
-            currency_info = exchange_rates.get_rate(arr[1].strip())
+            currency_info = exchange_rates.get_rate(arr[1].strip().upper())
             text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get('value') \
                    + ' (' + currency_info.get('date') + ')'
         else:
