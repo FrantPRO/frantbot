@@ -41,6 +41,7 @@ class BotComm:
         self.dp.add_handler(CommandHandler("help", self._help))
         self.dp.add_handler(CommandHandler("kurs", self._kurs))
         self.dp.add_handler(CommandHandler("chatid", self._get_chat_id))
+        self.dp.add_handler(CommandHandler("json", self._get_json))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo_all))
         self.dp.add_error_handler(self._error)
 
@@ -61,7 +62,8 @@ class BotComm:
                + "/start - Start the bot\n" \
                + "/help - about menu\n" \
                + "/kurs - Kurs valut (usd, eur, etc)\n" \
-               + "/chatid - get chat id"
+               + "/chatid - chat id\n" \
+               + "/json - answer in json"
         update.effective_message.reply_text(text)
         
     def _kurs(self, bot, update):
@@ -76,6 +78,9 @@ class BotComm:
 
     def _get_chat_id(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.chat.id)
+
+    def _get_json(self, bot, update):
+        self.bot.send_message(chat_id=update.effective_message.chat.id, text=str(update))
 
     def say_hello(self, chat_id, message_text):
         self.bot.send_message(chat_id=chat_id, text=message_text)
