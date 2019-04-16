@@ -55,8 +55,7 @@ class BotComm:
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
-        print(">>> " + update.effective_message)
-        update.effective_message.reply_text("Hello " + update.effective_message.first_name + "!")
+        update.effective_message.reply_text("Hello " + update.effective_message.from_user.first_name + "!")
 
     def _help(self, bot, update):
         text = "My first bot - echobot\n" \
