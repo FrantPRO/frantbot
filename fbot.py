@@ -1,12 +1,9 @@
 import logging
 from queue import Queue
-
 import cherrypy
 import telegram
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
-
 from settings import NAME, PORT, TOKEN
-
 import exchange_rates
 
 
@@ -25,9 +22,7 @@ class BotComm:
         self.NAME = NAME
         self.bot = telegram.Bot(self.TOKEN)
         try:
-            url = "https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN)
-            print(url)
-            self.bot.setWebhook(url)
+            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
         except:
             raise RuntimeError("Failed to set the webhook")
 
