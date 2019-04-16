@@ -16,6 +16,9 @@ class SimpleWebsite:
 class BotInstruction:
     @cherrypy.expose
     def index(self):
+        bot = BotComm(TOKEN, NAME)
+        bot.POST
+        bot.echo_all(bot, bot.dp.update_queue)
         return "<H1>Bot working...</H1>"
 
 
@@ -38,7 +41,7 @@ class BotComm:
         self.dp.add_handler(CommandHandler("start", self._start))
         self.dp.add_handler(CommandHandler("help", self._help))
         self.dp.add_handler(CommandHandler("kurs", self._kurs))
-        self.dp.add_handler(MessageHandler(Filters.text, self._echo_all))
+        self.dp.add_handler(MessageHandler(Filters.text, self.echo_all))
         self.dp.add_error_handler(self._error)
 
     @cherrypy.tools.json_in()
@@ -70,7 +73,7 @@ class BotComm:
             text = 'currency not found'
         update.effective_message.reply_text(text)
 
-    def _echo_all(self, bot, update):
+    def echo_all(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.text)
 
 
