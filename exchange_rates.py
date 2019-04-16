@@ -11,25 +11,12 @@ if r.status_code == 200:
 else:
     currencies = None
 
-usd = 'R01235'
-eur = 'R01239'
 
-
-def get_rate_usd():
+def get_rate(currency_code):
     if not currencies:
         return ''
 
     for parent in currencies:
-        if parent.getAttribute('ID') == usd:
+        if parent.getElementsByTagName('CharCode')[0].firstChild.data == currency_code:
             rate = parent.getElementsByTagName('Value')[0].firstChild.data
-            return {'currency': 'USD', 'date': date, 'value': rate}
-
-
-def get_rate_eur():
-    if not currencies:
-        return ''
-
-    for parent in currencies:
-        if parent.getAttribute('ID') == eur:
-            rate = parent.getElementsByTagName('Value')[0].firstChild.data
-            return {'currency': 'EUR', 'date': date, 'value': rate}
+            return {'currency': currency_code, 'date': date, 'value': rate}

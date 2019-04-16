@@ -45,7 +45,7 @@ class BotComm:
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
-        update.effective_message.reply_text('Hello friend!')
+        update.effective_message.reply_text("Hello " + update.effective_message.chat.first_name + "!")
 
     def _help(self, bot, update):
         text = 'My first bot - echobot\n' \
@@ -55,20 +55,13 @@ class BotComm:
         update.effective_message.reply_text(text)
         
     def _kurs(self, bot, update):
-        print(update)
-        if 'usd' in update.effective_message.text:
-            currency_info = exchange_rates.get_rate_usd()
-        elif 'eur' in update.effective_message.text:
-            currency_info = exchange_rates.get_rate_eur()
-        else:
-            currency_info = None
-
-        if currency_info:
+        arr = update.effective_message.text.split(" ")
+        if len(arr) > 1:
+            currency_info = exchange_rates.get_rate(arr[1].strip())
             text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get('value') \
                    + ' (' + currency_info.get('date') + ')'
         else:
             text = 'currency not found'
-
         update.effective_message.reply_text(text)
 
     def _echo_all(self, bot, update):
