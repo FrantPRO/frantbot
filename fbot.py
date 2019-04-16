@@ -16,10 +16,8 @@ class SimpleWebsite:
 class BotInstruction:
     @cherrypy.expose
     def index(self):
-        chat_id = "629791023"
         bot = BotComm(TOKEN, NAME)
-        bot.POST
-        bot.say_hello(bot, chat_id, "Hello from http!")
+        bot.say_hello("629791023", "Hello from http!")
         return "<H1>Bot working...</H1>"
 
 
