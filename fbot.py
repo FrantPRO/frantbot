@@ -42,7 +42,7 @@ class BotComm:
         self.dp.add_handler(CommandHandler("start", self._start))
         self.dp.add_handler(CommandHandler("help", self._help))
         self.dp.add_handler(CommandHandler("kurs", self._kurs))
-        self.dp.add_handler(CommandHandler("chatid", self._get_chat_id()))
+        self.dp.add_handler(CommandHandler("chatid", self._get_chat_id))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo_all))
         self.dp.add_error_handler(self._error)
 
