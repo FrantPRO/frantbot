@@ -109,8 +109,7 @@ if __name__ == "__main__":
     cherrypy.config.update({"server.socket_host": "0.0.0.0", })
     cherrypy.config.update({"server.socket_port": int(PORT), })
     cherrypy.tree.mount(SimpleWebsite(), "/")
-    cherrypy.tree.mount(BotInstruction().index(cherrypy.request.params.get("chat_id"),
-                                               cherrypy.request.params.get("message")), "/bot")
+    cherrypy.tree.mount(BotInstruction(), "/bot")
     cherrypy.tree.mount(
         BotComm(TOKEN, NAME),
         "/{}".format(TOKEN),
