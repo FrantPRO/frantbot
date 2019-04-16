@@ -54,27 +54,27 @@ class BotComm:
 
     def _help(self, bot, update):
         text = 'My first bot - echobot\n' \
-        '/start - Start the bot\n' \
-        '/help - about menu\n' \
-        '/kurs usd - Kurs valut (usd. eur)'
+               + '/start - Start the bot\n' \
+               + '/help - about menu\n' \
+               + '/kurs usd - Kurs valut (usd. eur)'
         update.effective_message.reply_text(text)
         
     def _kurs(self, bot, update):
-        currency_info = None
-        if 'usd' in message.text:
+        if 'usd' in update.effective_message.text:
             currency_info = exchange_rates.get_rate_usd()
-    
-        elif 'eur' in message.text:
+        elif 'eur' in update.effective_message.text:
             currency_info = exchange_rates.get_rate_eur()
-    
-         if currency_info:
-             text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get(
-                 'value') + ' (' + currency_info.get(
-               'date') + ')'
-         else:
+        else:
+            currency_info = None
+
+        if currency_info:
+            text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get('value') \
+                   + ' (' + currency_info.get('date') + ')'
+        else:
             text = 'currency not found'
-        update.effective_message.reply_text('kurs')
-        
+
+        update.effective_message.reply_text(text)
+
     def _echo_all(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.text)
 
