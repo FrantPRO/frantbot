@@ -7,6 +7,8 @@ from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
 
 from settings import NAME, PORT, TOKEN
 
+import exchange_rates
+
 
 class SimpleWebsite:
     @cherrypy.expose
@@ -58,6 +60,19 @@ class BotComm:
         update.effective_message.reply_text(text)
         
     def _kurs(self, bot, update):
+        currency_info = None
+        if 'usd' in message.text:
+           currency_info = exchange_rates.get_rate_usd()
+    
+        elif 'eur' in message.text:
+             currency_info = exchange_rates.get_rate_eur()
+    
+         if currency_info:
+             text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get(
+                 'value') + ' (' + currency_info.get(
+               'date') + ')'
+         else:
+            text = 'currency not found'
         update.effective_message.reply_text('kurs')
         
     def _echo_all(self, bot, update):
