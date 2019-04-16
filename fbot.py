@@ -16,7 +16,7 @@ class SimpleWebsite:
 class BotInstruction:
     @cherrypy.expose
     def index(self):
-        chat_id = "123"
+        chat_id = "629791023"
         bot = BotComm(TOKEN, NAME)
         bot.POST
         bot.send_message(chat_id=chat_id, text="test http")
@@ -62,7 +62,7 @@ class BotComm:
         text = "My first bot - echobot\n" \
                + "/start - Start the bot\n" \
                + "/help - about menu\n" \
-               + "/kurs - Kurs valut (usd, eur, etc)" \
+               + "/kurs - Kurs valut (usd, eur, etc)\n" \
                + "/chatid - get chat id"
         update.effective_message.reply_text(text)
         
