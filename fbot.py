@@ -62,10 +62,10 @@ class BotComm:
     def _kurs(self, bot, update):
         currency_info = None
         if 'usd' in message.text:
-           currency_info = exchange_rates.get_rate_usd()
+            currency_info = exchange_rates.get_rate_usd()
     
         elif 'eur' in message.text:
-             currency_info = exchange_rates.get_rate_eur()
+            currency_info = exchange_rates.get_rate_eur()
     
          if currency_info:
              text = 'Курс ' + currency_info.get('currency') + ': ' + currency_info.get(
