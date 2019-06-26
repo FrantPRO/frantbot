@@ -18,7 +18,7 @@ class BotInstruction:
     def index(self, chat_id, message):
         bot = BotComm(TOKEN, NAME)
         bot.say_hello(chat_id, message)
-        return "<H1>Bot working...</H1>"
+        return "<H1>Bot is working...</H1>"
 
 
 class BotComm:
