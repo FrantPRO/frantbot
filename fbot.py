@@ -1,6 +1,7 @@
 import logging
 from queue import Queue
 import cherrypy
+import requests
 import telegram
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
 from settings import NAME, PORT, TOKEN, HOST
