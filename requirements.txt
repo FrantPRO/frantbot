@@ -1,4 +1,3 @@
 requests
 cherrypy
 python-telegram-bot
-aiohttp
