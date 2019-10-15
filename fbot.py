@@ -69,6 +69,7 @@ class BotComm:
 
     def _kurs(self, bot, update):
         arr = update.effective_message.text.split(" ")
+        update.effective_message.reply_text(len(arr))
         if len(arr) < 2:
             update.effective_message.reply_text("Sorry, currency not found")
             return
