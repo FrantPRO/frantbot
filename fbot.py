@@ -81,8 +81,8 @@ class BotComm:
 
         currency_info = exchange_rates.get_rate(currency_code)
         if currency_info:
-            text = "Курс " + currency_info["currency"] + " (" + currency_info["name"] + "): " \
-                   + currency_info["value"] + " (" + currency_info["date"] + ")"
+            text = currency_info["currency"] + " (" + currency_info["name"] + ") курс на " + currency_info["date"] + \
+                   " = " + currency_info["value"] + " руб."
         else:
             text = "Unknown currency, try again"
         update.effective_message.reply_text(text)
