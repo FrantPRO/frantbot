@@ -5,7 +5,7 @@ import requests
 import telegram
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
 from settings import NAME, PORT, TOKEN, HOST
-import exchange_rates
+import service
 
 
 class SimpleWebsite:
@@ -79,7 +79,7 @@ class BotComm:
             update.effective_message.reply_text("1")
             return
 
-        currency_info = exchange_rates.get_rate(currency_code)
+        currency_info = service.get_currency_rate(currency_code)
         if currency_info:
             text = currency_info["currency"] + " (" + currency_info["name"] + ") курс на " + currency_info["date"] + \
                    " = " + currency_info["value"] + " руб."
@@ -97,7 +97,8 @@ class BotComm:
         self.bot.send_message(chat_id=chat_id, text=message_text)
 
     def _echo_all(self, bot, update):
-        self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.text)
+        self.bot.send_message(chat_id=update.effective_message.chat.id,
+                              text=service.transliterate_text(update.effective_message.text))
 
 
 if __name__ == "__main__":
