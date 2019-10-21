@@ -19,4 +19,5 @@ def get_rate(currency_code):
     for parent in currencies:
         if parent.getElementsByTagName('CharCode')[0].firstChild.data == currency_code:
             rate = parent.getElementsByTagName('Value')[0].firstChild.data
-            return {'currency': currency_code, 'date': date, 'value': rate}
+            name = parent.getElementsByTagName('Name')[0].firstChild.data
+            return {"currency": currency_code, "name": name,"date": date, "value": rate}
