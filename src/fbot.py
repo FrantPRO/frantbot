@@ -89,7 +89,8 @@ class BotComm:
         update.effective_message.reply_text(text)
 
     def _translate(self, bot, update):
-        self.bot.send_message(chat_id=update.effective_message.chat.id, text=service.translate())
+        self.bot.send_message(chat_id=update.effective_message.chat.id,
+                              text=service.translate(update.effective_message.text))
 
     def _get_chat_id(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.chat.id)

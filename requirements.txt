@@ -1,3 +1,2 @@
 cherrypy
 python-telegram-bot
-google-cloud-translate
