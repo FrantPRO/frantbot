@@ -102,8 +102,9 @@ class BotComm:
         self.bot.send_message(chat_id=chat_id, text=message_text)
 
     def _echo_all(self, bot, update):
-        self.bot.send_message(chat_id=update.effective_message.chat.id,
-                              text=service.transliterate_text(update.effective_message.text))
+        if update.effective_message.chat.id == 629791023:
+            self.bot.send_message(chat_id=update.effective_message.chat.id,
+                                  text=service.transliterate_text(update.effective_message.text))
 
 
 if __name__ == "__main__":
