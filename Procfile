@@ -1,1 +1,1 @@
-web: python fbot.py
+web: python app.py
