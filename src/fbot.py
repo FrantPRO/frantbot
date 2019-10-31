@@ -1,11 +1,10 @@
 import logging
 from queue import Queue
 import cherrypy
-import requests
 import telegram
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
-from settings import NAME, PORT, TOKEN, HOST
-import service
+from src.settings import NAME, PORT, TOKEN, HOST
+from src import service
 
 
 class SimpleWebsite:
@@ -86,6 +85,9 @@ class BotComm:
         else:
             text = "Unknown currency, try again"
         update.effective_message.reply_text(text)
+
+    def _translate(self, bot, update):
+        self.bot.send_message(chat_id=update.effective_message.chat.id, text=service.translate())
 
     def _get_chat_id(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.chat.id)
