@@ -48,8 +48,13 @@ def transliterate_text(text):
     return result
 
 
-def translate(text_for_translate: str, to_language="auto", from_language="auto") -> str:
+def translate(text_for_translate: str) -> str:
     base_link = "http://translate.google.com/m?hl=%s&sl=%s&q=%s"
+    from_language = detect(text_for_translate)
+    if from_language == "ru":
+        to_language = "en"
+    else:
+        to_language = "ru"
     text_for_translate = urllib.parse.quote(text_for_translate)
     link = base_link % (to_language, from_language, text_for_translate)
     agent = {'User-Agent':
