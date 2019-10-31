@@ -89,11 +89,8 @@ class BotComm:
         update.effective_message.reply_text(text)
 
     def _translate(self, bot, update):
-        arr = update.effective_message.text.split(" ")
-        if len(arr) < 2:
-            return
         self.bot.send_message(chat_id=update.effective_message.chat.id,
-                              text=service.translate(arr[1]))
+                              text=service.translate(update.effective_message.text.replace("/t", "").strip()))
 
     def _get_chat_id(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.chat.id)
@@ -106,7 +103,11 @@ class BotComm:
 
     def _echo_all(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id,
-                              text=service.transliterate_text(update.effective_message.text))
+                              text=service.transliterate_text(update.effective_message.text +
+                                                              " >>> chat " + str(update.effective_message.chat) +
+                                                              " >>> from_user " + str(update.effective_message.from_user) +
+                                                              " >>> reply_text " + str(update.effective_message.reply_text) +
+                                                              " >>> bot " + str(update.effective_message.bot)))
 
 
 if __name__ == "__main__":
