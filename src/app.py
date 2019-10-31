@@ -105,6 +105,10 @@ class BotComm:
         if update.effective_message.chat.id == 629791023:
             self.bot.send_message(chat_id=update.effective_message.chat.id,
                                   text=service.transliterate_text(update.effective_message.text))
+            if update.effective_message.chat.id == -379455106:
+                if service.detect_lang(update.effective_message.text) == "ru":
+                    self.bot.send_message(chat_id=update.effective_message.chat.id,
+                                          text=service.transliterate_text("Let's speak English!"))
 
 
 if __name__ == "__main__":

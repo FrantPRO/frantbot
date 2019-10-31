@@ -4,6 +4,7 @@ import html.parser
 import urllib.request
 import urllib.parse
 import re
+from langdetect import detect
 
 url = "http://www.cbr.ru/scripts/XML_daily.asp"
 r = requests.get(url)
@@ -71,3 +72,7 @@ def translate(text_for_translate: str, to_language="auto", from_language="auto")
     else:
         result = html.unescape(re_result[0])
     return result
+
+
+def detect_lang(text):
+    return detect(text)
