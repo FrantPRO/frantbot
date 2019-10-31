@@ -104,8 +104,7 @@ class BotComm:
     def _echo_all(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id,
                               text=service.transliterate_text(update.effective_message.text +
-                                                              " >>> effective_message " + str(update.effective_message) +
-                                                              " >>> effective_message type " + type(update.effective_message)))
+                                                              " >>> effective_message " + str(update.effective_message)))
 
 
 if __name__ == "__main__":
