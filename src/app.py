@@ -40,7 +40,7 @@ class BotComm:
         self.dp.add_handler(CommandHandler("start", self._start))
         self.dp.add_handler(CommandHandler("help", self._help))
         self.dp.add_handler(CommandHandler("kurs", self._kurs))
-        self.dp.add_handler(CommandHandler("translate", self._translate))
+        self.dp.add_handler(CommandHandler("t", self._translate))
         self.dp.add_handler(CommandHandler("chatid", self._get_chat_id))
         self.dp.add_handler(CommandHandler("json", self._get_json))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo_all))
@@ -62,7 +62,7 @@ class BotComm:
         text = "My first bot - echobot\n" \
                + "/start - Start the bot\n" \
                + "/help - about menu\n" \
-               + "/translate - translate text by google translate\n" \
+               + "/t - translate text by google translate\n" \
                + "/kurs - Kurs valut (usd, eur, etc)\n" \
                + "/chatid - chat id\n" \
                + "/json - answer in json"
