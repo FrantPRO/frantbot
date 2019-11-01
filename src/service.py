@@ -25,20 +25,20 @@ def get_currency_rate(currency_code):
         if parent.getElementsByTagName("CharCode")[0].firstChild.data == currency_code:
             rate = parent.getElementsByTagName("Value")[0].firstChild.data
             name = parent.getElementsByTagName("Name")[0].firstChild.data
-            return {"currency": currency_code, "name": name,"date": date, "value": rate}
+            return {"currency": currency_code, "name": name, "date": date, "value": rate}
 
 
 def transliterate_text(text):
     result = ""
     dic = {"а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "e",
-              "ж": "zh", "з": "z", "и": "i", "й": "i", "к": "k", "л": "l", "м": "m", "н": "n",
-              "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f", "х": "h",
-              "ц": "ts", "ч": "ch", "ш": "sh", "щ": "scz", "ъ": "", "ы": "y", "ь": "", "э": "e",
-              "ю": "u", "я": "ja", "А": "A", "Б": "B", "В": "V", "Г": "G", "Д": "D", "Е": "E", "Ё": "E",
-              "Ж": "zh", "З": "z", "И": "i", "Й": "i", "К": "k", "Л": "l", "М": "m", "Н": "n",
-              "О": "O", "П": "P", "Р": "R", "С": "S", "Т": "T", "У": "U", "Ф": "F", "Х": "H",
-              "Ц": "Ts", "Ч": "Ch", "Ш": "Sh", "Щ": "Scz", "Ъ": "", "Ы": "Y", "Ь": "", "Э": "E",
-              "Ю": "U", "Я": "Ya"}
+           "ж": "zh", "з": "z", "и": "i", "й": "i", "к": "k", "л": "l", "м": "m", "н": "n",
+           "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f", "х": "h",
+           "ц": "ts", "ч": "ch", "ш": "sh", "щ": "scz", "ъ": "", "ы": "y", "ь": "", "э": "e",
+           "ю": "u", "я": "ja", "А": "A", "Б": "B", "В": "V", "Г": "G", "Д": "D", "Е": "E", "Ё": "E",
+           "Ж": "zh", "З": "z", "И": "i", "Й": "i", "К": "k", "Л": "l", "М": "m", "Н": "n",
+           "О": "O", "П": "P", "Р": "R", "С": "S", "Т": "T", "У": "U", "Ф": "F", "Х": "H",
+           "Ц": "Ts", "Ч": "Ch", "Ш": "Sh", "Щ": "Scz", "Ъ": "", "Ы": "Y", "Ь": "", "Э": "E",
+           "Ю": "U", "Я": "Ya"}
     for i in range(len(text)):
         if text[i] in dic:
             sim = dic[text[i]]
@@ -90,5 +90,12 @@ def weather_forecast(city, key):
     if data.get("count", 0) == 0:
         return "City not found!"
     else:
-        wd = data['list'][0]['main']
-        return {"temp": wd["temp"], 'wind': {wd['speed'], wd['deg']}}
+        wd = data['list'][0]
+        return {
+            "Temp": wd["main"]["temp"],
+            "Wind": str(wd["wind"]["speed"]) + " m/s" + " dir: " + str(wd["wind"]["deg"]),
+            "Rain": wd["rain"],
+            "Snow": wd["snow"],
+            "Clouds": wd["clouds"]["all"],
+            "Description": wd["weather"][0]["description"]
+        }
