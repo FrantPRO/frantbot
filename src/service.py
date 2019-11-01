@@ -83,6 +83,27 @@ def detect_lang(text):
     return detect(text)
 
 
+def wind_direction(grad: int) -> str:
+    if 0 <= grad < 22.5:
+        return "nord"
+    elif 22.5 <= grad < 67.5:
+        return "norf-east"
+    elif 67.5 <= grad < 112.5:
+        return "east"
+    elif 112.5 <= grad < 157.5:
+        return "south-east"
+    elif 157.5 <= grad < 202.5:
+        return "south"
+    elif 202.5 <= grad < 247.5:
+        return "south-west"
+    elif 247.5 <= grad < 292.5:
+        return "west"
+    elif 292.5 <= grad < 337.5:
+        return "north-west"
+    elif 337.5 <= grad <= 380:
+        return "nord"
+
+
 def weather_forecast(city, key):
     resp = requests.get("https://api.openweathermap.org/data/2.5/find",
                         params={'q': city, 'units': 'metric', 'lang': "ru", 'APPID': key})
@@ -91,6 +112,7 @@ def weather_forecast(city, key):
         return "City not found!"
     else:
         wd = data['list'][0]
-        return """{} {}\nTemp: {} *C\nWind: {} m/s dir: {} *\nRain: {}\nSnow: {}\nClouds: {} %\nDescription: {}"""\
+        return """{} {}\nTemp: {} *C\nWind: {} m/s dir: {} *\nRain: {}\nSnow: {}\nClouds: {} %\nDescription: {}""" \
             .format(wd["name"], wd["sys"]["country"], wd["main"]["temp"], str(wd["wind"]["speed"]),
-                    str(wd["wind"]["deg"]), wd["rain"], wd["snow"], wd["clouds"]["all"], wd["weather"][0]["description"])
+                    wind_direction(wd["wind"]["deg"]), wd["rain"], wd["snow"], wd["clouds"]["all"],
+                    wd["weather"][0]["description"])
