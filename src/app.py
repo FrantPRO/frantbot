@@ -94,7 +94,7 @@ class BotComm:
                               text=service.translate(update.effective_message.text.replace("/t", "").strip()))
 
     def _weather(self, bot, update):
-        weather_forecast = service.weather_forecast(update.effective_message.text.replace("/t", "").strip(),
+        weather_forecast = service.weather_forecast(update.effective_message.text.replace("/w", "").strip(),
                                                     OPENWEATHERMAP_KEY)
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=weather_forecast)
 
