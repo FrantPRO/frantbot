@@ -3,7 +3,7 @@ from queue import Queue
 import cherrypy
 import telegram
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
-from src.settings import NAME, PORT, TOKEN, HOST
+from src.settings import NAME, PORT, TOKEN, HOST, OPENWEATHERMAP_KEY
 from src import service
 
 
@@ -39,10 +39,11 @@ class BotComm:
 
         self.dp.add_handler(CommandHandler("start", self._start))
         self.dp.add_handler(CommandHandler("help", self._help))
-        self.dp.add_handler(CommandHandler("kurs", self._kurs))
+        self.dp.add_handler(CommandHandler("k", self._kurs))
         self.dp.add_handler(CommandHandler("t", self._translate))
-        self.dp.add_handler(CommandHandler("chatid", self._get_chat_id))
-        self.dp.add_handler(CommandHandler("json", self._get_json))
+        self.dp.add_handler(CommandHandler("w", self._weather))
+        # self.dp.add_handler(CommandHandler("chatid", self._get_chat_id))
+        # self.dp.add_handler(CommandHandler("json", self._get_json))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo_all))
         self.dp.add_error_handler(self._error)
 
@@ -91,6 +92,11 @@ class BotComm:
     def _translate(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id,
                               text=service.translate(update.effective_message.text.replace("/t", "").strip()))
+
+    def _weather(self, bot, update):
+        weather_forecast = service.weather_forecast(update.effective_message.text.replace("/t", "").strip(),
+                                                    OPENWEATHERMAP_KEY)
+        self.bot.send_message(chat_id=update.effective_message.chat.id, text=weather_forecast)
 
     def _get_chat_id(self, bot, update):
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.chat.id)

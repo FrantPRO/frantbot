@@ -76,3 +76,14 @@ def translate(text_for_translate: str, to_language="auto", from_language="auto")
 
 def detect_lang(text):
     return detect(text)
+
+
+def weather_forecast(city, key):
+    resp = requests.get("https://api.openweathermap.org/data/2.5/find",
+                        params={'q': city, 'units': 'metric', 'lang': "ru", 'APPID': key})
+    data = resp.json()
+    if data.get("count", 0) == 0:
+        return "City not found!"
+    else:
+        wd = data['list'][0]['main']
+        return {"temp": wd["temp"], 'wind': {wd['speed'], wd['deg']}}
