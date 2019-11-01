@@ -106,7 +106,7 @@ def wind_direction(grad: int) -> str:
 
 def weather_forecast(city, key):
     resp = requests.get("https://api.openweathermap.org/data/2.5/find",
-                        params={'q': city, 'units': 'metric', 'lang': "ru", 'APPID': key})
+                        params={'q': city, 'units': 'metric', 'lang': "en", 'APPID': key})
     data = resp.json()
     if data.get("count", 0) == 0:
         return "City not found!"
