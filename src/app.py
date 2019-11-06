@@ -42,8 +42,6 @@ class BotComm:
         self.dp.add_handler(CommandHandler("k", self._kurs))
         self.dp.add_handler(CommandHandler("t", self._translate))
         self.dp.add_handler(CommandHandler("w", self._weather))
-        # self.dp.add_handler(CommandHandler("chatid", self._get_chat_id))
-        # self.dp.add_handler(CommandHandler("json", self._get_json))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo_all))
         self.dp.add_error_handler(self._error)
 
@@ -57,16 +55,15 @@ class BotComm:
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
-        update.effective_message.reply_text("Hello  " + update.effective_message.from_user.first_name + "!")
+        update.effective_message.reply_text("Hello " + update.effective_message.from_user.first_name + "!")
 
     def _help(self, bot, update):
-        text = "My first bot - echobot\n" \
-               + "/start - Start the bot\n" \
+        text = "My first bot\n" \
+               + "/start - start the bot\n" \
                + "/help - about menu\n" \
+               + "/k - kurs valut (usd, eur, etc)\n" \
                + "/t - translate text by google translate\n" \
-               + "/kurs - Kurs valut (usd, eur, etc)\n" \
-               + "/chatid - chat id\n" \
-               + "/json - answer in json"
+               + "/w - weather forecast"
         update.effective_message.reply_text(text)
 
     def _kurs(self, bot, update):
@@ -97,12 +94,6 @@ class BotComm:
         weather_forecast = service.weather_forecast(update.effective_message.text.replace("/w", "").strip(),
                                                     OPENWEATHERMAP_KEY)
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=weather_forecast)
-
-    def _get_chat_id(self, bot, update):
-        self.bot.send_message(chat_id=update.effective_message.chat.id, text=update.effective_message.chat.id)
-
-    def _get_json(self, bot, update):
-        self.bot.send_message(chat_id=update.effective_message.chat.id, text=str(update))
 
     def say_hello(self, chat_id, message_text):
         self.bot.send_message(chat_id=chat_id, text=message_text)
