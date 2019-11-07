@@ -87,8 +87,13 @@ class BotComm:
         update.effective_message.reply_text(text)
 
     def _translate(self, bot, update):
+        text = update.effective_message.text.replace("/t", "").strip()
+        if text:
+            result = service.translate(text)
+        else:
+            result = "Nothing to translate"
         self.bot.send_message(chat_id=update.effective_message.chat.id,
-                              text=service.translate(update.effective_message.text.replace("/t", "").strip()))
+                              text=result)
 
     def _weather(self, bot, update):
         weather_forecast = service.weather_forecast(update.effective_message.text.replace("/w", "").strip(),
