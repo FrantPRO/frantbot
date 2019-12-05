@@ -1,10 +1,7 @@
-# Bot for Telegram
+# Telegram Bot
 
-### My first bot on Python3
-
-***Include:***
+***Bot can:***
 - Returning "Echo" with transcoding
 - Currency exchange
-- Returning ID chat
-- Returning JSON with info about chat
-- Translating with Google API
+- Translating by Google Translate
+- Weather forecast by OpenWeatherMap
