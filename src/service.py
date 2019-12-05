@@ -113,12 +113,12 @@ def weather_forecast(city, key):
         res = "City not found!"
     else:
         wd = data['list'][0]
-        res = "{city} {country}" \
-              "Temp: {temp} *C" \
-              "Wind: {wind} m/s {wind_dir}" \
-              "Rain: {rain}" \
-              "Snow: {snow}" \
-              "Clouds: {clouds} %" \
+        res = "{city} {country}\n" \
+              "Temp: {temp} *C\n" \
+              "Wind: {wind} m/s {wind_dir}\n" \
+              "Rain: {rain}\n" \
+              "Snow: {snow}\n" \
+              "Clouds: {clouds} %\n" \
               "Description: {desc}" \
             .format(city=wd["name"],
                     country=wd["sys"]["country"],
