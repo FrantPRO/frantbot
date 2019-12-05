@@ -3,7 +3,7 @@ from queue import Queue
 import cherrypy
 import telegram
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
-from src.settings import NAME, PORT, TOKEN, HOST, OPENWEATHERMAP_KEY
+from src.settings import NAME, PORT, TOKEN, HOST, OPENWEATHERMAP_KEY, TIMEZONEDB_KEY
 from src import service
 
 
@@ -97,7 +97,7 @@ class BotComm:
 
     def _weather(self, bot, update):
         weather_forecast = service.weather_forecast(update.effective_message.text.replace("/w", "").strip(),
-                                                    OPENWEATHERMAP_KEY)
+                                                    OPENWEATHERMAP_KEY, TIMEZONEDB_KEY)
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=weather_forecast)
 
     def say_hello(self, chat_id, message_text):
