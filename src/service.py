@@ -1,3 +1,4 @@
+import datetime
 import requests
 import xml.dom.minidom
 import html.parser
@@ -122,7 +123,7 @@ def weather_forecast(city, key):
               "Description: {desc}" \
             .format(city=wd["name"],
                     country=wd["sys"]["country"],
-                    date=wd["dt"],
+                    date=datetime.datetime.fromtimestamp(wd["dt"]).strftime("%d.%m.%Y %H:%M"),
                     temp=round(wd["main"]["temp"]),
                     wind=str(wd["wind"]["speed"]),
                     wind_dir=wind_direction(wd["wind"]["deg"]),
