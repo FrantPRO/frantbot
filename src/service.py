@@ -110,23 +110,23 @@ def weather_forecast(city, key):
                         params={'q': city, 'units': 'metric', 'lang': "en", 'APPID': key})
     data = resp.json()
     if data.get("count", 0) == 0:
-        return "City not found!"
+        res = "City not found!"
     else:
         wd = data['list'][0]
-        return """
-        {city} {country}
-    Temp: {temp} *C
-    Wind: {wind} m/s {wind_dir}
-    Rain: {rain}
-    Snow: {snow}
-    Clouds: {clouds} %
-    Description: {desc}
-        """.format(city=wd["name"],
-                   country=wd["sys"]["country"],
-                   temp=round(wd["main"]["temp"]),
-                   wind=str(wd["wind"]["speed"]),
-                   wind_dir=wind_direction(wd["wind"]["deg"]),
-                   rain=wd["rain"],
-                   snow=wd["snow"],
-                   clouds=wd["clouds"]["all"],
-                   desc=wd["weather"][0]["description"])
+        res = "{city} {country}" \
+              "Temp: {temp} *C" \
+              "Wind: {wind} m/s {wind_dir}" \
+              "Rain: {rain}" \
+              "Snow: {snow}" \
+              "Clouds: {clouds} %" \
+              "Description: {desc}" \
+            .format(city=wd["name"],
+                    country=wd["sys"]["country"],
+                    temp=round(wd["main"]["temp"]),
+                    wind=str(wd["wind"]["speed"]),
+                    wind_dir=wind_direction(wd["wind"]["deg"]),
+                    rain=wd["rain"],
+                    snow=wd["snow"],
+                    clouds=wd["clouds"]["all"],
+                    desc=wd["weather"][0]["description"])
+    return res
