@@ -113,7 +113,20 @@ def weather_forecast(city, key):
         return "City not found!"
     else:
         wd = data['list'][0]
-        return """{} {}\nTemp: {} *C\nWind: {} m/s {}\nRain: {}\nSnow: {}\nClouds: {} %\nDescription: {}""" \
-            .format(wd["name"], wd["sys"]["country"], wd["main"]["temp"], str(wd["wind"]["speed"]),
-                    wind_direction(wd["wind"]["deg"]), wd["rain"], wd["snow"], wd["clouds"]["all"],
-                    wd["weather"][0]["description"])
+        return """
+        {city} {country}\n
+        Temp: {temp} *C\n
+        Wind: {wind} m/s {wind_dir}\n
+        Rain: {rain}\n
+        Snow: {snow}\n
+        Clouds: {clouds} %\n
+        Description: {desc}
+        """.format(city=wd["name"],
+                   country=wd["sys"]["country"],
+                   temp=round(wd["main"]["temp"]),
+                   wind=str(wd["wind"]["speed"]),
+                   wind_dir=wind_direction(wd["wind"]["deg"]),
+                   rain=wd["rain"],
+                   snow=wd["snow"],
+                   clouds=wd["clouds"]["all"],
+                   desc=wd["weather"][0]["description"])
