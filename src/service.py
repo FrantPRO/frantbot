@@ -114,13 +114,13 @@ def weather_forecast(city, key):
     else:
         wd = data['list'][0]
         return """
-        {city} {country}\n
-        Temp: {temp} *C\n
-        Wind: {wind} m/s {wind_dir}\n
-        Rain: {rain}\n
-        Snow: {snow}\n
-        Clouds: {clouds} %\n
-        Description: {desc}
+        {city} {country}
+    Temp: {temp} *C
+    Wind: {wind} m/s {wind_dir}
+    Rain: {rain}
+    Snow: {snow}
+    Clouds: {clouds} %
+    Description: {desc}
         """.format(city=wd["name"],
                    country=wd["sys"]["country"],
                    temp=round(wd["main"]["temp"]),
