@@ -106,37 +106,42 @@ def wind_direction(grad: int) -> str:
 
 
 def weather_forecast(city, weather_key, timezone_key):
-    city = city.replace("-", " ").replace("  ", " ")
+    city = city.replace("-", " ").replace("  ", " ").strip()
     resp = requests.get("https://api.openweathermap.org/data/2.5/find",
                         params={'q': city, 'units': 'metric', 'lang': "en", 'APPID': weather_key})
     data = resp.json()
+    res = ""
     if data.get("count", 0) == 0:
-        res = "City not found!"
+        res = "{} not found!".format(city)
     else:
-        wd = data['list'][0]
+        for city_data in data['list']:
 
-        resp_cur_time = requests.get("http://api.timezonedb.com/v2.1/get-time-zone?"
-                                     "key={key}&format=json&by=position&"
-                                     "lat={lat}&lng={lon}"
-                                     .format(key=timezone_key, lat=wd["coord"]["lat"], lon=wd["coord"]["lon"]))
-        cur_time = resp_cur_time.json()
+            resp_cur_time = requests.get("http://api.timezonedb.com/v2.1/get-time-zone?"
+                                         "key={key}&format=json&by=position&"
+                                         "lat={lat}&lng={lon}"
+                                         .format(key=timezone_key, lat=city_data["coord"]["lat"],
+                                                 lon=city_data["coord"]["lon"]))
+            cur_time = resp_cur_time.json()
 
-        res = "{city} {country}\n" \
-              "{date}\n" \
-              "Temp: {temp} *C\n" \
-              "Wind: {wind} m/s {wind_dir}\n" \
-              "Rain: {rain}\n" \
-              "Snow: {snow}\n" \
-              "Clouds: {clouds} %\n" \
-              "Description: {desc}" \
-            .format(city=wd["name"],
-                    country=wd["sys"]["country"],
-                    date=datetime.datetime.fromtimestamp(cur_time.get("timestamp", 0)).strftime("%d.%m.%Y %H:%M"),
-                    temp=round(wd["main"]["temp"]),
-                    wind=str(wd["wind"]["speed"]),
-                    wind_dir=wind_direction(wd["wind"]["deg"]),
-                    rain=wd["rain"],
-                    snow=wd["snow"],
-                    clouds=wd["clouds"]["all"],
-                    desc=wd["weather"][0]["description"])
+            if res:
+                res += "\n"
+
+            res += "{city} {country}\n" \
+                   "{date}\n" \
+                   "Temp: {temp} *C\n" \
+                   "Wind: {wind} m/s {wind_dir}\n" \
+                   "Rain: {rain}\n" \
+                   "Snow: {snow}\n" \
+                   "Clouds: {clouds} %\n" \
+                   "Description: {desc}" \
+                .format(city=city_data["name"],
+                        country=city_data["sys"]["country"],
+                        date=datetime.datetime.fromtimestamp(cur_time.get("timestamp", 0)).strftime("%d.%m.%Y %H:%M"),
+                        temp=round(city_data["main"]["temp"]),
+                        wind=str(city_data["wind"]["speed"]),
+                        wind_dir=wind_direction(city_data["wind"]["deg"]),
+                        rain=city_data["rain"],
+                        snow=city_data["snow"],
+                        clouds=city_data["clouds"]["all"],
+                        desc=city_data["weather"][0]["description"])
     return res
