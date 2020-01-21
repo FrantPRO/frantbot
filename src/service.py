@@ -123,7 +123,10 @@ def weather_forecast(city, weather_key, timezone_key):
                                                  lon=city_data["coord"]["lon"]))
             cur_time = resp_cur_time.json()
 
-            res += "* {city} {country}\n" \
+            if res:
+                res += "\n\n"
+
+            res += "{city} {country}\n" \
                    "geo: [{coord}]\n" \
                    "{date}\n" \
                    "Temp: {temp} *C\n" \
@@ -134,7 +137,7 @@ def weather_forecast(city, weather_key, timezone_key):
                    "Description: {desc}" \
                 .format(city=city_data["name"],
                         country=city_data["sys"]["country"],
-                        coord=str(city_data["coord"]["lon"]) + ", " + str(city_data["coord"]["lat"]),
+                        coord=str(city_data["coord"]["lat"]) + ", " + str(city_data["coord"]["lon"]),
                         date=datetime.datetime.fromtimestamp(cur_time.get("timestamp", 0)).strftime("%d.%m.%Y %H:%M"),
                         temp=round(city_data["main"]["temp"]),
                         wind=str(city_data["wind"]["speed"]),
