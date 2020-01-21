@@ -120,28 +120,31 @@ def weather_forecast(city, weather_key, timezone_key):
                                          "key={key}&format=json&by=position&"
                                          "lat={lat}&lng={lon}"
                                          .format(key=timezone_key, lat=city_data["coord"]["lat"],
-                                                 lon=city_data["coord"]["lon"]))
-            cur_time = resp_cur_time.json()
+                                                 lon=city_data["coord"]["lon"])).json()
+            cur_datatime = datetime.datetime.fromtimestamp(resp_cur_time.get("timestamp", 0))
+            cur_date = cur_datatime.strftime("%d.%m.%Y")
+            cur_time = cur_datatime.strftime("%H:%M")
 
             if res:
                 res += "\n\n"
 
             res += "<b>{city} {country}</b>\n" \
                    "<a href=\"{coord_link}\">geo: [{lat}, {lot}]</a>\n" \
-                   "{date}\n" \
-                   "Temp: {temp} *C\n" \
-                   "Wind: {wind} m/s {wind_dir}\n" \
-                   "Rain: {rain}\n" \
-                   "Snow: {snow}\n" \
-                   "Clouds: {clouds} %\n" \
-                   "Description: {desc}" \
+                   "<em>Now</em> {date} <b>{time}</b>\n" \
+                   "<em>Temp:</em> {temp} *C\n" \
+                   "<em>Wind:</em> {wind} m/s {wind_dir}\n" \
+                   "<em>Rain:</em> {rain}\n" \
+                   "<em>Snow:</em> {snow}\n" \
+                   "<em>Clouds:</em> {clouds} %\n" \
+                   "<em>Description:</em> {desc}" \
                 .format(city=city_data["name"],
                         country=city_data["sys"]["country"],
                         coord_link="https://www.google.com/maps/@{lat},{lon},14z"
                         .format(lat=str(city_data["coord"]["lat"]), lon=str(city_data["coord"]["lon"])),
                         lat=str(city_data["coord"]["lat"]),
                         lot=str(city_data["coord"]["lon"]),
-                        date=datetime.datetime.fromtimestamp(cur_time.get("timestamp", 0)).strftime("%d.%m.%Y %H:%M"),
+                        date=cur_date,
+                        time=cur_time,
                         temp=round(city_data["main"]["temp"]),
                         wind=str(city_data["wind"]["speed"]),
                         wind_dir=wind_direction(city_data["wind"]["deg"]),
