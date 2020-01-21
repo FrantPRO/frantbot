@@ -127,7 +127,7 @@ def weather_forecast(city, weather_key, timezone_key):
                 res += "\n\n"
 
             res += "{city} {country}\n" \
-                   "geo: [{coord}]\n" \
+                   "geo: {coord}\n" \
                    "{date}\n" \
                    "Temp: {temp} *C\n" \
                    "Wind: {wind} m/s {wind_dir}\n" \
