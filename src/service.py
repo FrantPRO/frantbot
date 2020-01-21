@@ -127,7 +127,7 @@ def weather_forecast(city, weather_key, timezone_key):
                 res += "<br><br>"
 
             res += "<b>{city} {country}</b><br>" \
-                   "<a href=\"{coord}\">geo: [{coord}]<br>" \
+                   "<a href=\"{coord_link}\">geo: [{lat}, {lot}]</a><br>" \
                    "{date}<br>" \
                    "Temp: {temp} *C<br>" \
                    "Wind: {wind} m/s {wind_dir}<br>" \
@@ -137,8 +137,10 @@ def weather_forecast(city, weather_key, timezone_key):
                    "Description: {desc}" \
                 .format(city=city_data["name"],
                         country=city_data["sys"]["country"],
-                        coord="https://www.google.com/maps/@{lat},{lon},14z".format(lat=str(city_data["coord"]["lat"]),
-                                                                                    lon=str(city_data["coord"]["lon"])),
+                        coord_link="https://www.google.com/maps/@{lat},{lon},14z"
+                        .format(lat=str(city_data["coord"]["lat"]), lon=str(city_data["coord"]["lon"])),
+                        lat=str(city_data["coord"]["lat"]),
+                        lot=str(city_data["coord"]["lon"]),
                         date=datetime.datetime.fromtimestamp(cur_time.get("timestamp", 0)).strftime("%d.%m.%Y %H:%M"),
                         temp=round(city_data["main"]["temp"]),
                         wind=str(city_data["wind"]["speed"]),
