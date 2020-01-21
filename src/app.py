@@ -93,7 +93,7 @@ class BotComm:
         else:
             result = "Nothing to translate"
         self.bot.send_message(chat_id=update.effective_message.chat.id,
-                              text=result, disable_web_page_preview=False)
+                              text=result, disable_web_page_preview=False, parse_mode="HTML")
 
     def _weather(self, bot, update):
         weather_forecast = service.weather_forecast(update.effective_message.text.replace("/w", "").strip(),

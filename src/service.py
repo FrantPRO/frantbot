@@ -124,16 +124,16 @@ def weather_forecast(city, weather_key, timezone_key):
             cur_time = resp_cur_time.json()
 
             if res:
-                res += "\n\n"
+                res += "<br><br>"
 
-            res += "{city} {country}\n" \
-                   "geo: {coord}\n" \
-                   "{date}\n" \
-                   "Temp: {temp} *C\n" \
-                   "Wind: {wind} m/s {wind_dir}\n" \
-                   "Rain: {rain}\n" \
-                   "Snow: {snow}\n" \
-                   "Clouds: {clouds} %\n" \
+            res += "<b>{city} {country}</b><br>" \
+                   "<a href=\"{coord}\">geo: [{coord}]<br>" \
+                   "{date}<br>" \
+                   "Temp: {temp} *C<br>" \
+                   "Wind: {wind} m/s {wind_dir}<br>" \
+                   "Rain: {rain}<br>" \
+                   "Snow: {snow}<br>" \
+                   "Clouds: {clouds} %<br>" \
                    "Description: {desc}" \
                 .format(city=city_data["name"],
                         country=city_data["sys"]["country"],
