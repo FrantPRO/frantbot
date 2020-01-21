@@ -137,7 +137,8 @@ def weather_forecast(city, weather_key, timezone_key):
                    "Description: {desc}" \
                 .format(city=city_data["name"],
                         country=city_data["sys"]["country"],
-                        coord=str(city_data["coord"]["lat"]) + ", " + str(city_data["coord"]["lon"]),
+                        coord="https://www.google.com/maps/@{lat},{lon},14z".format(lat=str(city_data["coord"]["lat"]),
+                                                                                    lon=str(city_data["coord"]["lon"])),
                         date=datetime.datetime.fromtimestamp(cur_time.get("timestamp", 0)).strftime("%d.%m.%Y %H:%M"),
                         temp=round(city_data["main"]["temp"]),
                         wind=str(city_data["wind"]["speed"]),
