@@ -92,13 +92,13 @@ class BotComm:
             result = service.translate(text)
         else:
             result = "Nothing to translate"
-        self.bot.send_message(chat_id=update.effective_message.chat.id,
-                              text=result, disable_web_page_preview=False, parse_mode="HTML")
+        self.bot.send_message(chat_id=update.effective_message.chat.id, text=result)
 
     def _weather(self, bot, update):
         weather_forecast = service.weather_forecast(update.effective_message.text.replace("/w", "").strip(),
                                                     OPENWEATHERMAP_KEY, TIMEZONEDB_KEY)
-        self.bot.send_message(chat_id=update.effective_message.chat.id, text=weather_forecast)
+        self.bot.send_message(chat_id=update.effective_message.chat.id, text=weather_forecast,
+                              parse_mode="HTML", disable_web_page_preview=True)
 
     def say_hello(self, chat_id, message_text):
         self.bot.send_message(chat_id=chat_id, text=message_text)
