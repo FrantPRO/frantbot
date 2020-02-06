@@ -86,9 +86,9 @@ def detect_lang(text):
 
 def wind_direction(grad: int) -> str:
     if 0 <= grad < 22.5:
-        return "nord"
+        return "north"
     elif 22.5 <= grad < 67.5:
-        return "norf-east"
+        return "north-east"
     elif 67.5 <= grad < 112.5:
         return "east"
     elif 112.5 <= grad < 157.5:
@@ -102,19 +102,19 @@ def wind_direction(grad: int) -> str:
     elif 292.5 <= grad < 337.5:
         return "north-west"
     elif 337.5 <= grad <= 380:
-        return "nord"
+        return "north"
 
 
 def weather_forecast(city, weather_key, timezone_key):
-    city = city.replace("-", " ").replace("  ", " ").strip()
+    city_prep = city.replace("-", " ").replace("  ", " ").strip()
     resp = requests.get("https://api.openweathermap.org/data/2.5/find",
-                        params={'q': city, 'units': 'metric', 'lang': "en", 'APPID': weather_key})
+                        params={'q': city_prep, 'units': 'metric', 'lang': "en", 'APPID': weather_key})
     data = resp.json()
     res = ""
     if data.get("count", 0) == 0:
         res = "{} not found!".format(city)
     else:
-        for city_data in data['list']:
+        for city_data in data.get('list', {}):
 
             resp_cur_time = requests.get("http://api.timezonedb.com/v2.1/get-time-zone?"
                                          "key={key}&format=json&by=position&"
@@ -139,7 +139,7 @@ def weather_forecast(city, weather_key, timezone_key):
                    "<em>Description:</em> {desc}" \
                 .format(city=city_data["name"],
                         country=city_data["sys"]["country"],
-                        coord_link="https://www.google.com/maps/@{lat},{lon},14z"
+                        coord_link="https://www.google.com/maps/@{lat},{lon},10z"
                         .format(lat=str(city_data["coord"]["lat"]), lon=str(city_data["coord"]["lon"])),
                         lat=str(city_data["coord"]["lat"]),
                         lot=str(city_data["coord"]["lon"]),
