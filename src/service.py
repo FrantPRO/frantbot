@@ -6,6 +6,7 @@ import urllib.request
 import urllib.parse
 import re
 from langdetect import detect
+from math import ceil
 
 url = "http://www.cbr.ru/scripts/XML_daily.asp"
 r = requests.get(url)
@@ -84,25 +85,19 @@ def detect_lang(text):
     return detect(text)
 
 
-def wind_direction(grad: int) -> str:
-    if 0 <= grad < 22.5:
-        return "north"
-    elif 22.5 <= grad < 67.5:
-        return "north-east"
-    elif 67.5 <= grad < 112.5:
-        return "east"
-    elif 112.5 <= grad < 157.5:
-        return "south-east"
-    elif 157.5 <= grad < 202.5:
-        return "south"
-    elif 202.5 <= grad < 247.5:
-        return "south-west"
-    elif 247.5 <= grad < 292.5:
-        return "west"
-    elif 292.5 <= grad < 337.5:
-        return "north-west"
-    elif 337.5 <= grad <= 380:
-        return "north"
+def wind_direction(deg: int) -> str:
+    directions = {
+        1: "north",
+        2: "north-east",
+        3: "east",
+        4: "south-east",
+        5: "south",
+        6: "south-west",
+        7: "west",
+        8: "north-west",
+        9: "north"
+    }
+    return directions.get(ceil(((deg - (360 * int(deg / 360)) if deg > 360 else deg) + 22.5) / 45))
 
 
 def weather_forecast(city, weather_key, timezone_key):
