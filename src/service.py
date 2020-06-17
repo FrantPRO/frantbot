@@ -196,7 +196,7 @@ def weather_forecast(city, weather_key, timezone_key):
             try:
                 resp_cur_time = resp_time.json()
             except Exception as e:
-                logging.error("Error", {
+                print("Error", {
                     "params": {
                         "lat": lat,
                         "lon": lon,
