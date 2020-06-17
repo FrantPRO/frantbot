@@ -57,12 +57,17 @@ class BotComm:
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
-        keyboard = [telegram.KeyboardButton("One"), telegram.KeyboardButton("Two")]
+        keyboard = [[telegram.KeyboardButton("One")], [telegram.KeyboardButton("Two"),
+                    [telegram.KeyboardButton("Three"), telegram.KeyboardButton("Four")]]]
         user_markup = telegram.ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
-        update.effective_message.reply_text(
-            "Hello " + update.effective_message.from_user.first_name + "!",
+        bot.send_message(
+            chat_id=update.effective_message.chat.id,
+            text="Hello " + update.effective_message.from_user.first_name + "!",
             reply_markup=user_markup
         )
+        # update.effective_message.reply_text(
+        #     "Hello " + update.effective_message.from_user.first_name + "!"
+        # )
 
     def _help(self, bot, update):
         text = (
