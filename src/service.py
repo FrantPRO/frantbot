@@ -1,5 +1,5 @@
-import logging
 import datetime
+import time
 import requests
 import xml.dom.minidom
 import html.parser
@@ -175,7 +175,8 @@ def weather_forecast(city, weather_key, timezone_key):
     )
     data = resp.json()
     res = ""
-    if data.get("count", 0) == 0:
+    count = data.get("count", 0)
+    if count == 0:
         res = "{} not found!".format(city)
     else:
         for city_data in data.get("list", {}):
@@ -248,4 +249,7 @@ def weather_forecast(city, weather_key, timezone_key):
                     desc=city_data["weather"][0]["description"]
                 )
             )
+        if count > 1:
+            count -= 1
+            time.sleep(1)
     return res
