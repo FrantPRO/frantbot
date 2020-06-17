@@ -179,15 +179,23 @@ def weather_forecast(city, weather_key, timezone_key):
     else:
         for city_data in data.get("list", {}):
 
+            coord = city_data.get("coord")
+            if not coord:
+                continue
+
+            lat = coord.get("lat")
+            lon = coord.get("lon")
+            if not lat or not lon:
+                continue
+
             resp_time = requests.get(
                 "http://api.timezonedb.com/v2.1/get-time-zone?key={key}&format=json&by=position&"
-                "lat={lat}&lng={lon}".format(
-                    key=timezone_key,
-                    lat=city_data.get("coord", {}).get("lat", 0.0),
-                    lon=city_data.get("coord", {}).get("lon", 0.0)
-                )
+                "lat={lat}&lng={lon}".format(key=timezone_key, lat=lat, lon=lon)
             )
             resp_cur_time = resp_time.json()
+
+            if resp_cur_time.get("status") != "OK":
+                raise Exception(resp_cur_time.get("message"))
 
             cur_datatime = datetime.datetime.fromtimestamp(
                 resp_cur_time.get("timestamp", 0)
