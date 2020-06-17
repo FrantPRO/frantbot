@@ -136,10 +136,9 @@ def translate(text_for_translate: str) -> str:
         result = "I can't translate this, sorry!"
     else:
         result = html.unescape(
-            """
-        Auto detect {in_text_lg} > {out_text_lg}
-        {out_text}
-        """.format(
+            "Translation {in_text_lg} > {out_text_lg}\n"
+            "{out_text}"
+            .format(
                 in_text_lg=from_language, out_text_lg=to_language, out_text=re_result[0]
             )
         )
