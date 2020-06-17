@@ -57,8 +57,11 @@ class BotComm:
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
+        keyboard = [telegram.KeyboardButton("One"), telegram.KeyboardButton("Two")]
+        user_markup = telegram.ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
         update.effective_message.reply_text(
-            "Hello " + update.effective_message.from_user.first_name + "!"
+            "Hello " + update.effective_message.from_user.first_name + "!",
+            reply_markup=user_markup
         )
 
     def _help(self, bot, update):
@@ -68,7 +71,7 @@ class BotComm:
             + "/help - This menu\n"
             + "/k - Today's currency rate (type: /k usd, /k eur, etc)\n"
             + "/t - Translate text by Google translate\n"
-            + "/w - Today's weather forecast"
+            + "/w - Today's weather forecast (type: /w moscow,ru or /w los angeles,us)"
         )
         update.effective_message.reply_text(text)
 
