@@ -90,7 +90,7 @@ class BotComm:
                 currency=currency_info["currency"],
                 name=currency_info["name"],
                 date=currency_info["date"],
-                value=currency_info["value"],
+                value=currency_info["value"]
             )
         else:
             text = "Unknown currency, try again"
@@ -108,13 +108,13 @@ class BotComm:
         weather_forecast = service.weather_forecast(
             city=update.effective_message.text[3:].strip(),
             weather_key=OPENWEATHERMAP_KEY,
-            timezone_key=TIMEZONEDB_KEY,
+            timezone_key=TIMEZONEDB_KEY
         )
         self.bot.send_message(
             chat_id=update.effective_message.chat.id,
             text=weather_forecast,
             parse_mode="HTML",
-            disable_web_page_preview=True,
+            disable_web_page_preview=True
         )
 
     def say_hello(self, chat_id, message_text):
@@ -124,13 +124,13 @@ class BotComm:
         if update.effective_message.chat.id == 629791023:
             self.bot.send_message(
                 chat_id=update.effective_message.chat.id,
-                text=service.transliterate_text(update.effective_message.text),
+                text=service.transliterate_text(update.effective_message.text)
             )
         if update.effective_message.chat.id == -379455106:
             if service.detect_lang(update.effective_message.text) == "ru":
                 self.bot.send_message(
                     chat_id=update.effective_message.chat.id,
-                    text="Let's speak English!",
+                    text="Let's speak English!"
                 )
 
 
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     # Enable logging
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        level=logging.INFO,
+        level=logging.INFO
     )
     logger = logging.getLogger(__name__)
 

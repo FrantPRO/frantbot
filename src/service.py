@@ -1,6 +1,6 @@
 import datetime
 import requests
-import xml.dom.minidom
+import xml
 import html.parser
 import urllib.request
 import urllib.parse
@@ -170,7 +170,7 @@ def weather_forecast(city, weather_key, timezone_key):
     city_prep = city.replace("-", " ").replace("  ", " ").strip()
     resp = requests.get(
         "https://api.openweathermap.org/data/2.5/find",
-        params={"q": city_prep, "units": "metric", "lang": "en", "APPID": weather_key},
+        params={"q": city_prep, "units": "metric", "lang": "en", "APPID": weather_key}
     )
     data = resp.json()
     res = ""
@@ -184,7 +184,7 @@ def weather_forecast(city, weather_key, timezone_key):
                 "lat={lat}&lng={lon}".format(
                     key=timezone_key,
                     lat=city_data.get("coord", {}).get("lat", 0.0),
-                    lon=city_data.get("coord", {}).get("lon", 0.0),
+                    lon=city_data.get("coord", {}).get("lon", 0.0)
                 )
             )
             resp_cur_time = resp_time.json()
@@ -224,7 +224,7 @@ def weather_forecast(city, weather_key, timezone_key):
                     rain=city_data["rain"],
                     snow=city_data["snow"],
                     clouds=city_data["clouds"]["all"],
-                    desc=city_data["weather"][0]["description"],
+                    desc=city_data["weather"][0]["description"]
                 )
             )
     return res
