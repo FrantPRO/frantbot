@@ -1,3 +1,4 @@
+import logging
 import datetime
 import requests
 import xml.dom.minidom
@@ -192,7 +193,11 @@ def weather_forecast(city, weather_key, timezone_key):
                 "http://api.timezonedb.com/v2.1/get-time-zone?key={key}&format=json&by=position&"
                 "lat={lat}&lng={lon}".format(key=timezone_key, lat=lat, lon=lon)
             )
-            resp_cur_time = resp_time.json()
+            try:
+                resp_cur_time = resp_time.json()
+            except Exception as e:
+                logging.error(e)
+                return
 
             if resp_cur_time.get("status") != "OK":
                 raise Exception(resp_cur_time.get("message"))
