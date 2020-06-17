@@ -30,8 +30,10 @@ class BotComm:
         self.NAME = NAME
         self.bot = telegram.Bot(self.TOKEN)
         try:
-            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
-        except:
+            self.bot.setWebhook(
+                "https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN)
+            )
+        except Exception:
             raise RuntimeError("Failed to set the webhook")
 
         self.update_queue = Queue()
@@ -55,15 +57,19 @@ class BotComm:
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
-        update.effective_message.reply_text("Hello " + update.effective_message.from_user.first_name + "!")
+        update.effective_message.reply_text(
+            "Hello " + update.effective_message.from_user.first_name + "!"
+        )
 
     def _help(self, bot, update):
-        text = "The Bot\n" \
-               + "/start - start the bot\n" \
-               + "/help - about menu\n" \
-               + "/k - kurs valut (usd, eur, etc)\n" \
-               + "/t - translate text by google translate\n" \
-               + "/w - weather forecast"
+        text = (
+            "The Bot\n"
+            + "/start - Start The Bot\n"
+            + "/help - This menu\n"
+            + "/k - Today's currency rate (type: /k usd, /k eur, etc)\n"
+            + "/t - Translate text by Google translate\n"
+            + "/w - Today's weather forecast"
+        )
         update.effective_message.reply_text(text)
 
     def _kurs(self, bot, update):
@@ -80,8 +86,12 @@ class BotComm:
 
         currency_info = service.get_currency_rate(currency_code)
         if currency_info:
-            text = currency_info["currency"] + " (" + currency_info["name"] + ") курс на " + currency_info["date"] + \
-                   " = " + currency_info["value"] + " руб."
+            text = "{currency} ({name}) курс на {date} = {value} руб.".format(
+                currency=currency_info["currency"],
+                name=currency_info["name"],
+                date=currency_info["date"],
+                value=currency_info["value"],
+            )
         else:
             text = "Unknown currency, try again"
         update.effective_message.reply_text(text)
@@ -95,38 +105,63 @@ class BotComm:
         self.bot.send_message(chat_id=update.effective_message.chat.id, text=result)
 
     def _weather(self, bot, update):
-        weather_forecast = service.weather_forecast(city=update.effective_message.text[3:].strip(),
-                                                    weather_key=OPENWEATHERMAP_KEY, timezone_key=TIMEZONEDB_KEY)
-        self.bot.send_message(chat_id=update.effective_message.chat.id, text=weather_forecast,
-                              parse_mode="HTML", disable_web_page_preview=True)
+        weather_forecast = service.weather_forecast(
+            city=update.effective_message.text[3:].strip(),
+            weather_key=OPENWEATHERMAP_KEY,
+            timezone_key=TIMEZONEDB_KEY,
+        )
+        self.bot.send_message(
+            chat_id=update.effective_message.chat.id,
+            text=weather_forecast,
+            parse_mode="HTML",
+            disable_web_page_preview=True,
+        )
 
     def say_hello(self, chat_id, message_text):
         self.bot.send_message(chat_id=chat_id, text=message_text)
 
     def _echo_all(self, bot, update):
         if update.effective_message.chat.id == 629791023:
-            self.bot.send_message(chat_id=update.effective_message.chat.id,
-                                  text=service.transliterate_text(update.effective_message.text))
+            self.bot.send_message(
+                chat_id=update.effective_message.chat.id,
+                text=service.transliterate_text(update.effective_message.text),
+            )
         if update.effective_message.chat.id == -379455106:
             if service.detect_lang(update.effective_message.text) == "ru":
-                self.bot.send_message(chat_id=update.effective_message.chat.id, text="Let's speak English!")
+                self.bot.send_message(
+                    chat_id=update.effective_message.chat.id,
+                    text="Let's speak English!",
+                )
 
 
 if __name__ == "__main__":
     # Enable logging
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        level=logging.INFO)
+        level=logging.INFO,
+    )
     logger = logging.getLogger(__name__)
 
     # Set up the cherrypy configuration
-    cherrypy.config.update({"server.socket_host": HOST, })
-    cherrypy.config.update({"server.socket_port": int(PORT), })
+    cherrypy.config.update(
+        {
+            "server.socket_host": HOST,
+        }
+    )
+    cherrypy.config.update(
+        {
+            "server.socket_port": int(PORT),
+        }
+    )
     cherrypy.tree.mount(SimpleWebsite(), "/")
     cherrypy.tree.mount(BotInstruction(), "/bot")
     cherrypy.tree.mount(
         BotComm(TOKEN, NAME),
         "/{}".format(TOKEN),
-        {"/": {
-            "request.dispatch": cherrypy.dispatch.MethodDispatcher()}})
+        {
+            "/": {
+                "request.dispatch": cherrypy.dispatch.MethodDispatcher(),
+            }
+        },
+    )
     cherrypy.engine.start()
