@@ -193,18 +193,19 @@ def weather_forecast(city, weather_key, timezone_key):
                 "http://api.timezonedb.com/v2.1/get-time-zone?key={key}&format=json&by=position&"
                 "lat={lat}&lng={lon}".format(key=timezone_key, lat=lat, lon=lon)
             )
-            try:
-                resp_cur_time = resp_time.json()
-            except Exception as e:
-                print("Error", {
-                    "params": {
+
+            if resp_time.status_code != 200:
+                print("Error request to timezone service", {
+                    "status": resp_time.status_code,
+                    "message": resp_time.text,
+                    "request_params": {
                         "lat": lat,
                         "lon": lon,
-                        "resp_time": resp_time
                     },
-                    "error": e
                 })
-                return "Not found"
+                return "Service error, please try later"
+
+            resp_cur_time = resp_time.json()
 
             if resp_cur_time.get("status") != "OK":
                 raise Exception(resp_cur_time.get("message"))
