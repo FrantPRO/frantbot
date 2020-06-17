@@ -1,6 +1,6 @@
 import datetime
 import requests
-import xml
+import xml.dom.minidom
 import html.parser
 import urllib.request
 import urllib.parse
