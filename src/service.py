@@ -196,8 +196,15 @@ def weather_forecast(city, weather_key, timezone_key):
             try:
                 resp_cur_time = resp_time.json()
             except Exception as e:
-                logging.error(e)
-                return
+                logging.error("Error", {
+                    "params": {
+                        "lat": lat,
+                        "lon": lon,
+                        "resp_time": resp_time
+                    },
+                    "error": e
+                })
+                return "Not found"
 
             if resp_cur_time.get("status") != "OK":
                 raise Exception(resp_cur_time.get("message"))
