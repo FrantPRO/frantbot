@@ -1,1 +1,1 @@
-Select * from book;
+Select author, title from book;
