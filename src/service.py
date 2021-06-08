@@ -191,8 +191,8 @@ def weather_forecast(city, weather_key, timezone_key):
                 continue
 
             resp_time = requests.get(
-                "http://api.timezonedb.com/v2.1/get-time-zone?key={key}&format=json&by=position&"
-                "lat={lat}&lng={lon}".format(key=timezone_key, lat=lat, lon=lon)
+                "https://api.timezonedb.com/v2.1/get-time-zone?key={key}&format=json&by=position&lat={lat}&lng={lon}"
+                .format(key=timezone_key, lat=lat, lon=lon)
             )
 
             if resp_time.status_code != 200:
