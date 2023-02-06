@@ -8,3 +8,4 @@
 - Today's weather forecast by OpenWeatherMap
 
 _Used framework "cherrypy 18.3" and "python-telegram-bot 12.0"_
+
